@@ -19,6 +19,8 @@ extern TCHAR* GetString(int id);
 
 class WMOImporter : public SceneImport
 {
+	friend class WMOGroupImpl;
+
 public:
 	WMOImporter();
 	virtual ~WMOImporter();
@@ -48,13 +50,14 @@ private:
 	// ---------------------------------------------
 	// 具体的加载实现
 
-	void ImportGeomObject();
+	void importGeomObject();
+	void importPortals();
 
-	Texmap* CreateTexture(LPCTSTR fileName);
+	Texmap* createTexture(const char* fileName);
 
-	StdMat2* CreateMaterial();
+	StdMat2* createMaterial();
 
-	INode* CreateDummyNode();
+	void createPlane(const WMOPortalVertex& portalVertex);
 
 private:
 
@@ -64,14 +67,6 @@ private:
 	// Group列表
 	typedef std::vector<WMOGroupImpl*> GroupList;
 	GroupList m_groupList;
-
-	// texture列表
-	typedef std::vector<std::string> TextureList;
-	TextureList m_textureList;
-
-	// Geoset列表
-	typedef std::vector<INode*> GeosetNodeList;
-	GeosetNodeList m_geosetNodeList;
 
 	// Material列表
 	typedef std::vector<StdMat2*> MaterialList;
@@ -90,7 +85,7 @@ private:
 	std::ofstream m_logStream;
 
 	unsigned int m_wmoFileLength;
-	unsigned char* m_wmoFileData;	// 模型文件数据内容
+	unsigned char* m_wmoFileData;	// 文件数据内容
 
 	WMORootHeader* m_wmoRootHeader;
 	const char* m_textureData;

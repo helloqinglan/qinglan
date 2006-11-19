@@ -159,12 +159,12 @@ int M2Importer::DoImport(const TCHAR *name,ImpInterface *ii,Interface *i, BOOL s
 	// 1. 加载模型顶点数据
 	m_logStream << "Import geometry object..." << endl;
 	m_logStream.flush();
-	ImportGeomObject();
+	importGeomObject();
 
 	// 2. 加载骨骼数据
 	m_logStream << "Import bone object..." << endl;
 	m_logStream.flush();
-	ImportBoneObject();
+	importBoneObject();
 
 	return 1;
 }

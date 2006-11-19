@@ -151,7 +151,14 @@ int WMOImporter::DoImport(const TCHAR *name,ImpInterface *ii,Interface *i, BOOL 
 	// 加载模型顶点数据
 	m_logStream << "Import geometry object..." << endl;
 	m_logStream.flush();
-	ImportGeomObject();
+	importGeomObject();
+
+	// 加载Portal面
+	m_logStream << "Import portals..." << endl;
+	m_logStream.flush();
+	importPortals();
+
+	m_maxInterface->RedrawViews(m_maxInterface->GetTime());
 
 	return 1;
 }

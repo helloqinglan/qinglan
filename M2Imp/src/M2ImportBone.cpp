@@ -27,10 +27,10 @@ inline unsigned int FrameToTime(TimeValue t)
 }
 
 // 2. 加载骨骼数据
-void M2Importer::ImportBoneObject()
+void M2Importer::importBoneObject()
 {
 	// Bone Group Header Node
-	INode* groupHeadNode = CreateDummyNode();
+	INode* groupHeadNode = createGroupHeaderNode();
 	groupHeadNode->SetGroupHead(TRUE);
 	groupHeadNode->SetGroupMember(FALSE);
 
@@ -105,7 +105,7 @@ void M2Importer::ImportBoneObject()
 		if (boneDef.translation.nKeys)
 		{
 			// 设置动画控制器为线性控制器
-			Control* posControl = CreatePositionController();
+			Control* posControl = createPositionController();
 			tmControl->SetPositionController(posControl);
 
 			unsigned int* timeData = (unsigned int*)(m_m2FileData + boneDef.translation.ofsTimes);
@@ -171,7 +171,7 @@ void M2Importer::ImportBoneObject()
 		// Rotation
 		if (boneDef.rotation.nKeys)
 		{
-			Control* rotControl = CreateRotationController();
+			Control* rotControl = createRotationController();
 			tmControl->SetRotationController(rotControl);
 
 			unsigned int* timeData = (unsigned int*)(m_m2FileData + boneDef.rotation.ofsTimes);
@@ -213,7 +213,7 @@ void M2Importer::ImportBoneObject()
 		// Scaling
 		if (boneDef.scaling.nKeys)
 		{
-			Control* scaControl = CreateScaleController();
+			Control* scaControl = createScaleController();
 			tmControl->SetScaleController(scaControl);
 
 			unsigned int* timeData = (unsigned int*)(m_m2FileData + boneDef.scaling.ofsTimes);
@@ -256,7 +256,7 @@ void M2Importer::ImportBoneObject()
 
 
 // 创建线性的动画控制器
-Control* M2Importer::CreatePositionController()
+Control* M2Importer::createPositionController()
 {
 	Control* posControl = (Control*)m_maxInterface->CreateInstance(
 		CTRL_POSITION_CLASS_ID, IPOS_CONTROL_CLASS_ID);
@@ -277,7 +277,7 @@ Control* M2Importer::CreatePositionController()
 	return posControl;
 }
 
-Control* M2Importer::CreateRotationController()
+Control* M2Importer::createRotationController()
 {
 	Control* rotControl = (Control*)m_maxInterface->CreateInstance(
 		CTRL_ROTATION_CLASS_ID, Class_ID(LININTERP_ROTATION_CLASS_ID,0));
@@ -285,7 +285,7 @@ Control* M2Importer::CreateRotationController()
 	return rotControl;
 }
 
-Control* M2Importer::CreateScaleController()
+Control* M2Importer::createScaleController()
 {
 	Control* scaControl = (Control*)m_maxInterface->CreateInstance(
 		CTRL_SCALE_CLASS_ID, Class_ID(LININTERP_SCALE_CLASS_ID,0));

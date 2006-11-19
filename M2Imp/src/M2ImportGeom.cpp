@@ -6,10 +6,10 @@ using namespace std;
 
 
 // 1. 加载模型顶点数据
-void M2Importer::ImportGeomObject()
+void M2Importer::importGeomObject()
 {
 	// Group Header Node
-	INode* groupHeadNode = CreateDummyNode();
+	INode* groupHeadNode = createGroupHeaderNode();
 	groupHeadNode->SetGroupHead(TRUE);
 	groupHeadNode->SetGroupMember(FALSE);
 
@@ -45,7 +45,7 @@ void M2Importer::ImportGeomObject()
 		// 创建Node, 并且设为Group Header Node的子节点
 		ImpNode* tmpImpNode = m_impInterface->CreateNode();
 		tmpImpNode->Reference(triObject);
-		tmpImpNode->SetPivot(*(Point3*)&(geosetData.v));
+		//tmpImpNode->SetPivot(*(Point3*)&(geosetData.v));
 
 		m_impInterface->AddNodeToScene(tmpImpNode);
 		INode* realINode = tmpImpNode->GetINode();
@@ -131,7 +131,7 @@ void M2Importer::ImportGeomObject()
 		mesh.RemoveDegenerateFaces();
 		mesh.RemoveIllegalFaces();
 
-		realINode->BackCull(FALSE);			// 取消背面裁减 不是所有的Node都要取消背面裁减
+		//realINode->BackCull(FALSE);			// 取消背面裁减 双面绘制与取消背面裁减一起设置
 		realINode->EvalWorldState(0);
 
 		// 索引值修正
@@ -154,17 +154,17 @@ void M2Importer::ImportGeomObject()
 		if (texDef.type == 0)
 			textureName = (LPCSTR)(m_m2FileData + texDef.nameOfs);
 		else
-			textureName = GetReplacableTexture(texDef.type);
+			textureName = getReplacableTexture(texDef.type);
 
 		StdMat2* material = m_materialList[texUnit.op];
 		if (!material)
-			material = CreateMaterial();
+			material = createMaterial();
 
 		// 根据混合属性决定加在第几层
-		material->SetSubTexmap(ID_DI, CreateTexture(textureName.c_str()));
-		material->SetTexmapAmt(ID_DI, 0.0f, 0);
+		material->SetSubTexmap(ID_DI, createTexture(textureName.c_str()));
+		material->SetTexmapAmt(ID_DI, 100.0f, 0);
 		material->EnableMap(ID_DI, TRUE);
-		material->SetTwoSided(TRUE);		// 双面 设置了此标志的才打开
+		//material->SetTwoSided(TRUE);		// 双面 设置了此标志的才打开
 
 		m_maxInterface->GetMaterialLibrary().Add(material);
 		m_geosetNodeList[texUnit.op]->SetMtl(material);
@@ -173,7 +173,7 @@ void M2Importer::ImportGeomObject()
 	m_maxInterface->RedrawViews(m_maxInterface->GetTime());
 }
 
-string M2Importer::GetReplacableTexture(int id)
+string M2Importer::getReplacableTexture(int id)
 {
 	// 生物最多有三张可替换贴图 type分别为11 12 13
 	// 角色最多有五张可替换贴图 type分别为1 6 2 8 11
@@ -228,7 +228,7 @@ string M2Importer::GetReplacableTexture(int id)
 	return retTexName;
 }
 
-StdMat2* M2Importer::CreateMaterial()
+StdMat2* M2Importer::createMaterial()
 {
 	static int i = 1;
 
@@ -249,14 +249,14 @@ StdMat2* M2Importer::CreateMaterial()
 	return material;
 }
 
-Texmap* M2Importer::CreateTexture(LPCTSTR fileName)
+Texmap* M2Importer::createTexture(LPCTSTR fileName)
 {
 	BitmapManager* bmpMgr = TheManager;
 
 	size_t pathSlashPos = m_modelName.find_last_of('\\');
 	string pathName = m_modelName.substr(0, pathSlashPos + 1);
 
-	// 将贴图文件名改为当前目录下的png文件
+	// 将贴图文件名改为当前目录下的tga文件
 
 	string origFileName = fileName;
 
@@ -271,12 +271,29 @@ Texmap* M2Importer::CreateTexture(LPCTSTR fileName)
 		origFileName = origFileName.substr(slashPos, origFileName.length() - slashPos);
 	}
 
+	pathName += string("texture\\");
 	pathName += origFileName;
-	pathName.append(".png");
+	pathName.append(".tga");
 
 	m_logStream << "Model Texture Name: " << pathName << endl;
-
 	TSTR newFileName = pathName.c_str();
+
+	if (origFileName.length())
+	{
+		// 改成用系统的检查文件是否存在的API
+		ifstream testStream(newFileName, ios::binary | ios::in);
+		if (testStream.fail())
+		{
+			string errstr = string("Load texture error. filename: ") + string(newFileName);
+			errstr += string("\n\nOriginal file: ");
+			errstr += string(fileName);
+			MessageBox(NULL, errstr.c_str(), "TBD: Error.", MB_OK);
+			m_logStream << errstr << endl;
+		}
+		else
+			testStream.close();
+	}
+
 	if (bmpMgr->CanImport(newFileName))
 	{
 		BitmapTex* bmpTex = NewDefaultBitmapTex();
@@ -285,15 +302,13 @@ Texmap* M2Importer::CreateTexture(LPCTSTR fileName)
 		bmpTex->SetAlphaAsMono(TRUE);
 		bmpTex->SetAlphaSource(ALPHA_FILE);
 
-		m_logStream << "Set Texture OK." << endl;
-
 		return bmpTex;
 	}
 
 	return 0;
 }
 
-INode* M2Importer::CreateDummyNode()
+INode* M2Importer::createGroupHeaderNode()
 {
 	DummyObject* obj = (DummyObject*)CreateInstance(HELPER_CLASS_ID, Class_ID(DUMMY_CLASS_ID, 0));
 

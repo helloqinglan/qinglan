@@ -47,22 +47,22 @@ private:
 	// ---------------------------------------------
 	// 具体的加载实现
 
-	void ImportGeomObject();
-	void ImportBoneObject();
+	void importGeomObject();
+	void importBoneObject();
 
-	Texmap* CreateTexture(LPCTSTR fileName);
+	Texmap* createTexture(LPCTSTR fileName);
 
-	StdMat2* CreateMaterial();
+	StdMat2* createMaterial();
 
 	// 从文本定义文件中获取可替换纹理文件名
-	std::string GetReplacableTexture(int id);
+	std::string getReplacableTexture(int id);
 
-	INode* CreateDummyNode();
+	INode* createGroupHeaderNode();
 
 	// 创建线性的动画控制器
-	Control* CreatePositionController();
-	Control* CreateRotationController();
-	Control* CreateScaleController();
+	Control* createPositionController();
+	Control* createRotationController();
+	Control* createScaleController();
 
 private:
 

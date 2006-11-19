@@ -64,6 +64,33 @@ struct WMOGroupInfo
 	int nameOfs;
 };
 
+// Group Header
+struct WMOGroupHeader
+{
+	int nameStart;
+	int nameStart2;
+	int flags;
+	Vec3D boxA;
+	Vec3D boxB;
+	short portalStart;
+	short portalCount;
+	short batches[4];
+	uint8 fogs[4];
+	int unk1, id, unk2, unk3;
+};
+
+// Render Batch
+struct WMORenderBatch 
+{
+	char bytes[12];
+	unsigned int indexStart;		// 顶点索引
+	unsigned short indexCount;
+	unsigned short vertexStart;		// 顶点数据
+	unsigned short vertexEnd;
+	unsigned char flags;
+	unsigned char texture;			// 贴图
+};
+
 #pragma pack(pop)
 
 #endif // __WMO_MODEL_HEADERS_H__
