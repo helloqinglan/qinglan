@@ -52,12 +52,14 @@ private:
 
 	void importGeomObject();
 	void importPortals();
+	void importLights();
 
 	Texmap* createTexture(const char* fileName);
 
 	StdMat2* createMaterial();
 
 	void createPlane(const WMOPortalVertex& portalVertex);
+	void createWMOLight(const WMOLights& light);
 
 private:
 
@@ -79,6 +81,10 @@ private:
 	// Portal 组关系列表
 	typedef std::vector<WMOPortalRelation> PortalRelations;
 	PortalRelations m_portalRelations;
+
+	// Lights 列表
+	typedef std::vector<WMOLights> OmniLightsList;
+	OmniLightsList m_omniLightsList;
 
 	std::string m_modelName;
 	std::string m_modelPath;

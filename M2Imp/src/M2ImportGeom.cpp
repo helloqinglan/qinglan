@@ -162,7 +162,6 @@ void M2Importer::importGeomObject()
 
 		// 根据混合属性决定加在第几层
 		material->SetSubTexmap(ID_DI, createTexture(textureName.c_str()));
-		material->SetTexmapAmt(ID_DI, 100.0f, 0);
 		material->EnableMap(ID_DI, TRUE);
 		//material->SetTwoSided(TRUE);		// 双面 设置了此标志的才打开
 

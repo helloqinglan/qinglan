@@ -82,7 +82,6 @@ void WMOImporter::importGeomObject()
 
 					// 根据混合属性决定加在第几层
 					material->SetSubTexmap(ID_DI, createTexture(fixName.c_str()));
-					material->SetTexmapAmt(ID_DI, 100.0f, 0);
 					material->EnableMap(ID_DI, TRUE);
 					//material->SetTwoSided(TRUE);		// 双面 设置了此标志的才打开
 
@@ -150,6 +149,11 @@ void WMOImporter::importGeomObject()
 		else if (!strcmp(fourcc, "MOLT"))
 		{
 			// 灯光
+			WMOLights* light = (WMOLights*)(m_wmoFileData + readLen);
+			for (unsigned int i = 0; i < m_wmoRootHeader->nLights; ++i)
+			{
+				m_omniLightsList.push_back(light[i]);
+			}
 		}
 		else if (!strcmp(fourcc, "MODS"))
 		{
@@ -192,9 +196,9 @@ StdMat2* WMOImporter::createMaterial()
 	material->SetAmbient(Color(1.0f, 1.0f, 1.0f), 0);
 	material->SetDiffuse(Color(1.0f, 1.0f, 1.0f), 0);
 	material->SetSpecular(Color(1.0f, 1.0f, 1.0f), 0);
-	material->SetShininess(0.5f, 0);
-	material->SetShinStr(0.7f, 0);
-
+	material->SetShininess(0.0f, 0);
+	material->SetShinStr(0.0f, 0);
+	material->SetOpacity(100.0f,0);
 	material->SetMtlFlag(MTL_DISPLAY_ENABLE_FLAGS, TRUE);
 
 	return material;

@@ -158,6 +158,11 @@ int WMOImporter::DoImport(const TCHAR *name,ImpInterface *ii,Interface *i, BOOL 
 	m_logStream.flush();
 	importPortals();
 
+	// º”‘ÿLights
+	m_logStream << "Import lights..." << endl;
+	m_logStream.flush();
+	importLights();
+
 	m_maxInterface->RedrawViews(m_maxInterface->GetTime());
 
 	return 1;

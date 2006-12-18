@@ -217,6 +217,9 @@
 				RelativePath="..\src\WMOImportGeom.cpp">
 			</File>
 			<File
+				RelativePath="..\src\WMOImportLight.cpp">
+			</File>
+			<File
 				RelativePath="..\src\WMOImportPortal.cpp">
 			</File>
 		</Filter>

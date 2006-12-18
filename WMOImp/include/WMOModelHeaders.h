@@ -64,6 +64,18 @@ struct WMOGroupInfo
 	int nameOfs;
 };
 
+// Lights–≈œ¢
+struct WMOLights
+{
+	uint32 type;
+	uint32 color;
+	Vec3D pos;
+	float intensity;
+	float unk[4];
+	float r1;
+	float r2;
+};
+
 // Group Header
 struct WMOGroupHeader
 {

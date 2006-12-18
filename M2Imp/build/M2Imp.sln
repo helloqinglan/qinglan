@@ -5,15 +5,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "M2Imp", "M2Imp.vcproj", "{4
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
 		Hybird = Hybird
 		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
-		{4CC555DF-B5A5-4207-869C-94B1A8CA61F5}.Debug.ActiveCfg = Debug|Win32
-		{4CC555DF-B5A5-4207-869C-94B1A8CA61F5}.Debug.Build.0 = Debug|Win32
 		{4CC555DF-B5A5-4207-869C-94B1A8CA61F5}.Hybird.ActiveCfg = Hybird|Win32
 		{4CC555DF-B5A5-4207-869C-94B1A8CA61F5}.Hybird.Build.0 = Hybird|Win32
 		{4CC555DF-B5A5-4207-869C-94B1A8CA61F5}.Release.ActiveCfg = Release|Win32
