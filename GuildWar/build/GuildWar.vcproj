@@ -24,6 +24,7 @@
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
 				PrecompiledHeaderThrough="GuildWarPch.h"
 				WarningLevel="3"
@@ -73,6 +74,7 @@
 				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="3"
 				PrecompiledHeaderThrough="GuildWarPch.h"
 				WarningLevel="3"
@@ -176,6 +178,18 @@
 			<Filter
 				Name="WorldThread"
 				Filter="">
+				<File
+					RelativePath="..\include\WorldThread\CryptStrategy.h">
+				</File>
+				<File
+					RelativePath="..\include\WorldThread\WorldPacket.h">
+				</File>
+				<File
+					RelativePath="..\include\WorldThread\WorldSocket.h">
+				</File>
+				<File
+					RelativePath="..\include\WorldThread\WorldThread.h">
+				</File>
 			</Filter>
 			<Filter
 				Name="Network"
@@ -246,12 +260,53 @@
 				Name="RealmThread"
 				Filter="">
 				<File
+					RelativePath="..\source\RealmThread\RealmPacket.h">
+				</File>
+				<File
 					RelativePath="..\source\RealmThread\RealmThread.cpp">
 				</File>
+				<Filter
+					Name="State"
+					Filter="">
+					<File
+						RelativePath="..\source\RealmThread\LogonAuthState.cpp">
+					</File>
+					<File
+						RelativePath="..\source\RealmThread\LogonAuthState.h">
+					</File>
+					<File
+						RelativePath="..\source\RealmThread\RealmListState.cpp">
+					</File>
+					<File
+						RelativePath="..\source\RealmThread\RealmListState.h">
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="WorldThread"
 				Filter="">
+				<File
+					RelativePath="..\source\WorldThread\WorldSocket.cpp">
+				</File>
+				<File
+					RelativePath="..\source\WorldThread\WorldThread.cpp">
+				</File>
+				<Filter
+					Name="States"
+					Filter="">
+					<File
+						RelativePath="..\source\WorldThread\States\CharacterState.cpp">
+					</File>
+					<File
+						RelativePath="..\source\WorldThread\States\CharacterState.h">
+					</File>
+					<File
+						RelativePath="..\source\WorldThread\States\SessionState.cpp">
+					</File>
+					<File
+						RelativePath="..\source\WorldThread\States\SessionState.h">
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="Network"

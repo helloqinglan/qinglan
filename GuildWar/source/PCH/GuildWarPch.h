@@ -38,4 +38,5 @@
 #include <assert.h>
 
 // Sha
-#include <openssl/sha.h>
+#include "Util/Sha1.h"
+#include "Util/BigNumber.h"

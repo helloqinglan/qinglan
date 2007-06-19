@@ -28,10 +28,6 @@ public:
     enum DataTypes getType() const { return m_filedType; }
 
     const char* getString() const { return m_filedValue; }
-    std::string getCppString() const
-    {
-        return m_filedValue ? m_filedValue : "";
-    }
     float getFloat() const { return m_filedValue ? static_cast<float>(atof(m_filedValue)) : 0; }
     bool getBool() const { return m_filedValue ? atoi(m_filedValue) > 0 : false; }
     int getInt() const { return m_filedValue ? static_cast<int>(atol(m_filedValue)) : 0; }

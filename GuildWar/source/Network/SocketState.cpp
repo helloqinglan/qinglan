@@ -10,20 +10,28 @@
 #include "Network/SocketState.h"
 
 SocketState::SocketState(SocketService* sm)
-: m_stateMachine(sm)
+: m_socketService(sm)
 {
-	// ***TODO*** 这样共享状态机的私有变量不大合适, 生命周期管理会有问题
-	m_dataBuffer = m_stateMachine->dataBuffer();
+}
+
+SocketState::~SocketState()
+{
 }
 
 // 向客户端发数据
 bool SocketState::sendData(const char* data, size_t len)
 {
-	return m_stateMachine->sendData(data, len);
+	return m_socketService->sendData(data, len);
 }
 
 // 变换状态
 bool SocketState::transition(SocketState* state)
 {
-	return m_stateMachine->transition(state);
+	return m_socketService->transition(state);
+}
+
+// ***TODO*** 该方法返回了类内部的私有变量, 不符合封装的原则
+CircularBuffer* SocketState::dataBuffer() const
+{
+	return m_socketService->dataBuffer();
 }

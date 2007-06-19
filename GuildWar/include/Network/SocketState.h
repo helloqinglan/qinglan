@@ -1,9 +1,9 @@
 
-// *-------------------------------------------------------
+// *-----------------------------------------------------------------
 //
 // socket处理器状态基类
 //
-// *-------------------------------------------------------
+// *-----------------------------------------------------------------
 
 #pragma once
 
@@ -13,7 +13,7 @@ class SocketState
 {
 public:
 	SocketState(SocketService* sm);
-	virtual ~SocketState() {}
+	virtual ~SocketState();
 
 	// 状态开始时的回调方法
 	virtual void enter() {}
@@ -31,7 +31,9 @@ public:
 	// 变换状态
 	bool transition(SocketState* state);
 
+	// ***TODO*** 该方法返回了类内部的私有变量, 不符合封装的原则
+	CircularBuffer* dataBuffer() const;
+
 protected:
-	SocketService* m_stateMachine;	// 所属的状态机
-	CircularBuffer* m_dataBuffer;	// 指向状态机的数据缓冲区
+	SocketService* m_socketService;	// 所属的服务处理器
 };

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "GuildWarFwd.h"
+#include "Database/QueryResult.h"
 
 class Database
 {
@@ -39,6 +39,8 @@ protected:
 
 private:
 	MYSQL* m_mysqlHandle;
+
+	// ***TODO*** 数据库的使用已经限制在系统启动时, 加锁操作应该可以取消
 	ACE_Thread_Mutex m_mysqlMutex;
 };
 

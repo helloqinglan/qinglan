@@ -1,11 +1,11 @@
 
-// *-------------------------------------------------------
+// *-----------------------------------------------------------------
 //
 // socket服务处理器基类
 //   负责将接收到的消息放入消息缓冲队列, 并通知当前状态处理
 //   提供一个向对应的客户端发消息的接口
 //
-// *-------------------------------------------------------
+// *-----------------------------------------------------------------
 
 #include "GuildWarPch.h"
 #include "Network/SocketState.h"
@@ -18,6 +18,8 @@ SocketService::SocketService(ACE_SOCK_Stream* peer)
 
 SocketService::~SocketService()
 {
+	transition(0);
+
 	delete m_dataBuffer;
 	m_peerStream->close();
 }
@@ -26,18 +28,18 @@ SocketService::~SocketService()
 // 转换状态
 bool SocketService::transition(SocketState* state)
 {
-	if (!state)
-	{
-		assert(state && "SocketService::transition state is null.");
-		return false;
-	}
-
 	SocketState* oldState = m_currentState;
 	m_currentState = state;
 
+	// 先执行上一个状态的退出操作后再删除
 	if (oldState)
+	{
 		oldState->leave();
-	m_currentState->enter();
+		delete oldState;
+	}
+
+	if (m_currentState)
+		m_currentState->enter();
 
 	return true;
 }
@@ -46,7 +48,10 @@ bool SocketService::transition(SocketState* state)
 bool SocketService::recvData(char* data, size_t len)
 {
 	if (!m_dataBuffer->write(data, len))
+	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("SocketService::recvData 写入数据到接收缓冲区失败.\n")));
 		return false;
+	}
 
 	return currentState()->process();
 }
