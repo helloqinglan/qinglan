@@ -34,8 +34,11 @@ CharacterState::CharacterState(SocketService* sm)
 
 bool CharacterState::process(void* arg)
 {
+	// ***TODO*** 丑陋的强制类型转换, 改成使用boost::any
 	WorldPacket* packet = (WorldPacket*)arg;
 
+	// ***TODO*** 在SocketState基类中提供对消息注册事件处理的方法
+	//            去掉这些冗长的if...else
 	if (packet->getOpcode() == CMSG_PING)
 		return pingRequest(*packet);
 	else if (packet->getOpcode() == CMSG_CHAR_CREATE)
