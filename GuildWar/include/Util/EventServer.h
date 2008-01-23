@@ -36,7 +36,7 @@ public:
 
 	// 注册non-const member function
 	template< class X, class Y >
-	void bind(u_int id, Y* pthis, bool (X::* function_to_bind)(const ByteBuffer& p1))
+	void bind(unsigned int id, Y* pthis, bool (X::* function_to_bind)(const ByteBuffer& p1))
 	{
 		DelegateMap::iterator itr = m_delegateMap.find(id);
 		if (itr == m_delegateMap.end())
@@ -53,7 +53,7 @@ public:
 
 	// 注销non-const member function
 	template< class X, class Y >
-	void unbind(u_int id, Y* pthis, bool (X::* function_to_bind)(const ByteBuffer& p1))
+	void unbind(unsigned int id, Y* pthis, bool (X::* function_to_bind)(const ByteBuffer& p1))
 	{
 		DelegateMap::iterator itr = m_delegateMap.find(id);
 		if (itr == m_delegateMap.end())
@@ -77,7 +77,7 @@ public:
 	}
 
 	// 注册static function
-	void bind(u_int id, bool (*function_to_bind)(const ByteBuffer& p1))
+	void bind(unsigned int id, bool (*function_to_bind)(const ByteBuffer& p1))
 	{
 		DelegateMap::iterator itr = m_delegateMap.find(id);
 		if (itr == m_delegateMap.end())
@@ -93,7 +93,7 @@ public:
 	}
 
 	// 注销static function
-	void unbind(u_int id, bool (function_to_bind)(const ByteBuffer& p1))
+	void unbind(unsigned int id, bool (function_to_bind)(const ByteBuffer& p1))
 	{
 		DelegateMap::iterator itr = m_delegateMap.find(id);
 		if (itr == m_delegateMap.end())
@@ -117,7 +117,7 @@ public:
 	}
 
 	// 激发事件
-	void emit(u_int id, const ByteBuffer& p1)
+	void emit(unsigned int id, const ByteBuffer& p1)
 	{
 		DelegateMap::iterator itr = m_delegateMap.find(id);
 		if (itr == m_delegateMap.end())
@@ -135,7 +135,7 @@ public:
 private:
 	typedef fastdelegate::FastDelegate1<const ByteBuffer&, bool> MyDelegate;
 	typedef std::vector<MyDelegate> DelegateList;
-	typedef std::map<u_int, DelegateList*> DelegateMap;
+	typedef std::map<unsigned int, DelegateList*> DelegateMap;
 	DelegateMap m_delegateMap;
 };
 

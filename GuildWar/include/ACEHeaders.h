@@ -309,7 +309,6 @@
 #include <ace/SV_Semaphore_Complex.h>
 #include <ace/SV_Semaphore_Simple.h>
 #include <ace/SV_Shared_Memory.h>
-#include <ace/Swap.h>
 #include <ace/Synch.h>
 #include <ace/Synch_Options.h>
 #include <ace/Synch_Traits.h>
@@ -332,7 +331,6 @@
 #include <ace/Timer_Queuefwd.h>
 #include <ace/Timer_Queue_Adapters.h>
 #include <ace/Timer_Wheel.h>
-#include <ace/Time_Request_Reply.h>
 #include <ace/Time_Value.h>
 #include <ace/TLI.h>
 #include <ace/TLI_Acceptor.h>

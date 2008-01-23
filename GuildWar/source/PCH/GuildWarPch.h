@@ -22,6 +22,11 @@
 
 // boost
 
+// GameMonkey
+
+// sigslot
+#include "Util/sigslot.h"
+
 // »·ÐÎ»º³åÇø
 #include "Util/CircularBuffer.h"
 

@@ -1,118 +1,182 @@
 <?xml version="1.0" encoding="gb2312"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.10"
+	Version="8.00"
 	Name="GuildWar"
 	ProjectGUID="{1B262C28-950A-48B1-B66F-8D012DA8405C}"
-	Keyword="Win32Proj">
+	Keyword="Win32Proj"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32"/>
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="../bin/debug"
 			IntermediateDirectory="../obj/debug"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="../include;../include/gm"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
-				MinimalRebuild="TRUE"
+				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="GuildWarPch.h"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="4"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="4"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ACEd.lib libeay32.lib libmySQL.lib"
+				AdditionalDependencies="ACEd.lib libeay32.lib libmySQL.lib gmLib.lib"
 				OutputFile="$(OutDir)/GuildWar.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../lib/debug"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/GuildWar.pdb"
 				SubSystem="1"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="../bin/release"
 			IntermediateDirectory="../obj/release"
 			ConfigurationType="1"
-			CharacterSet="2">
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../include"
+				AdditionalIncludeDirectories="../include;../include/gm"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
-				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="3"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="GuildWarPch.h"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCCustomBuildTool"/>
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ACE.lib libeay32.lib libmySQL.lib"
+				AdditionalDependencies="ACE.lib libeay32.lib libmySQL.lib gmLib.lib"
 				OutputFile="$(OutDir)/GuildWar.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../lib/release"
-				GenerateDebugInformation="TRUE"
+				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				TargetMachine="1"/>
+				TargetMachine="1"
+			/>
 			<Tool
-				Name="VCMIDLTool"/>
+				Name="VCALinkTool"
+			/>
 			<Tool
-				Name="VCPostBuildEventTool"/>
+				Name="VCManifestTool"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool"/>
+				Name="VCXDCMakeTool"
+			/>
 			<Tool
-				Name="VCPreLinkEventTool"/>
+				Name="VCBscMakeTool"
+			/>
 			<Tool
-				Name="VCResourceCompilerTool"/>
+				Name="VCFxCopTool"
+			/>
 			<Tool
-				Name="VCWebServiceProxyGeneratorTool"/>
+				Name="VCAppVerifierTool"
+			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"/>
+				Name="VCWebDeploymentTool"
+			/>
 			<Tool
-				Name="VCWebDeploymentTool"/>
-			<Tool
-				Name="VCManagedWrapperGeneratorTool"/>
-			<Tool
-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
 	<References>
@@ -120,202 +184,329 @@
 	<Files>
 		<Filter
 			Name="include"
-			Filter="">
+			>
 			<File
-				RelativePath="..\include\GuildWarFwd.h">
+				RelativePath="..\include\GuildWarFwd.h"
+				>
 			</File>
 			<Filter
 				Name="Util"
-				Filter="">
+				>
 				<File
-					RelativePath="..\include\Util\BigNumber.h">
+					RelativePath="..\include\Util\BigNumber.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Util\ByteBuffer.h">
+					RelativePath="..\include\Util\ByteBuffer.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Util\CircularBuffer.h">
+					RelativePath="..\include\Util\CircularBuffer.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Util\EventServer.h">
+					RelativePath="..\include\Util\EventServer.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Util\FastDelegate.h">
+					RelativePath="..\include\Util\FastDelegate.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Util\GameOption.h">
+					RelativePath="..\include\Util\GameOption.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Util\Log.h">
+					RelativePath="..\include\Util\Log.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Util\Sha1.h">
+					RelativePath="..\include\Util\Sha1.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Util\Util.h">
+					RelativePath="..\include\Util\Util.h"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="Database"
-				Filter="">
+				>
 				<File
-					RelativePath="..\include\Database\Database.h">
+					RelativePath="..\include\Database\Database.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Database\Field.h">
+					RelativePath="..\include\Database\Field.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Database\QueryResult.h">
+					RelativePath="..\include\Database\QueryResult.h"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="RealmThread"
-				Filter="">
+				>
 				<File
-					RelativePath="..\include\RealmThread\RealmThread.h">
+					RelativePath="..\include\RealmThread\RealmThread.h"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="WorldThread"
-				Filter="">
+				>
 				<File
-					RelativePath="..\include\WorldThread\CryptStrategy.h">
+					RelativePath="..\include\WorldThread\CryptStrategy.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\WorldThread\WorldPacket.h">
+					RelativePath="..\include\WorldThread\WorldPacket.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\WorldThread\WorldSocket.h">
+					RelativePath="..\include\WorldThread\WorldSocket.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\WorldThread\WorldThread.h">
+					RelativePath="..\include\WorldThread\WorldThread.h"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="Network"
-				Filter="">
+				>
 				<File
-					RelativePath="..\include\Network\SocketService.h">
+					RelativePath="..\include\Network\SocketService.h"
+					>
 				</File>
 				<File
-					RelativePath="..\include\Network\SocketState.h">
+					RelativePath="..\include\Network\SocketState.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GMBind"
+				>
+				<File
+					RelativePath="..\include\GMBind\gmArrayLib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmCall.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmGCRoot.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmGCRootUtil.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmHelpers.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmMathLib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmStringLib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmSystemLib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmVector3Lib.h"
+					>
 				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="source"
-			Filter="">
+			>
 			<File
-				RelativePath="..\source\GuildWarMain.cpp">
+				RelativePath="..\source\GuildWarMain.cpp"
+				>
 			</File>
 			<Filter
 				Name="PCH"
-				Filter="">
+				>
 				<File
-					RelativePath="..\source\PCH\GuildWarPch.cpp">
+					RelativePath="..\source\PCH\GuildWarPch.cpp"
+					>
 					<FileConfiguration
-						Name="Debug|Win32">
+						Name="Debug|Win32"
+						>
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="1"/>
+							UsePrecompiledHeader="1"
+						/>
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\source\PCH\GuildWarPch.h">
+					RelativePath="..\source\PCH\GuildWarPch.h"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="Utility"
-				Filter="">
+				>
 				<File
-					RelativePath="..\source\Utility\BigNumber.cpp">
+					RelativePath="..\source\Utility\BigNumber.cpp"
+					>
 				</File>
 				<File
-					RelativePath="..\source\Utility\GameOption.cpp">
+					RelativePath="..\source\Utility\GameOption.cpp"
+					>
 				</File>
 				<File
-					RelativePath="..\source\Utility\Log.cpp">
+					RelativePath="..\source\Utility\Log.cpp"
+					>
 				</File>
 				<File
-					RelativePath="..\source\Utility\Sha1.cpp">
+					RelativePath="..\source\Utility\Sha1.cpp"
+					>
 				</File>
 				<File
-					RelativePath="..\source\Utility\Util.cpp">
+					RelativePath="..\source\Utility\Util.cpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="Database"
-				Filter="">
+				>
 				<File
-					RelativePath="..\source\Database\Database.cpp">
+					RelativePath="..\source\Database\Database.cpp"
+					>
 				</File>
 				<File
-					RelativePath="..\source\Database\Field.cpp">
+					RelativePath="..\source\Database\Field.cpp"
+					>
 				</File>
 				<File
-					RelativePath="..\source\Database\QueryResult.cpp">
+					RelativePath="..\source\Database\QueryResult.cpp"
+					>
 				</File>
 			</Filter>
 			<Filter
 				Name="RealmThread"
-				Filter="">
+				>
 				<File
-					RelativePath="..\source\RealmThread\RealmPacket.h">
+					RelativePath="..\source\RealmThread\RealmPacket.h"
+					>
 				</File>
 				<File
-					RelativePath="..\source\RealmThread\RealmThread.cpp">
+					RelativePath="..\source\RealmThread\RealmThread.cpp"
+					>
 				</File>
 				<Filter
 					Name="State"
-					Filter="">
+					>
 					<File
-						RelativePath="..\source\RealmThread\LogonAuthState.cpp">
+						RelativePath="..\source\RealmThread\LogonAuthState.cpp"
+						>
 					</File>
 					<File
-						RelativePath="..\source\RealmThread\LogonAuthState.h">
+						RelativePath="..\source\RealmThread\LogonAuthState.h"
+						>
 					</File>
 					<File
-						RelativePath="..\source\RealmThread\RealmListState.cpp">
+						RelativePath="..\source\RealmThread\RealmListState.cpp"
+						>
 					</File>
 					<File
-						RelativePath="..\source\RealmThread\RealmListState.h">
+						RelativePath="..\source\RealmThread\RealmListState.h"
+						>
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="WorldThread"
-				Filter="">
+				>
 				<File
-					RelativePath="..\source\WorldThread\WorldSocket.cpp">
+					RelativePath="..\source\WorldThread\WorldSocket.cpp"
+					>
 				</File>
 				<File
-					RelativePath="..\source\WorldThread\WorldThread.cpp">
+					RelativePath="..\source\WorldThread\WorldThread.cpp"
+					>
 				</File>
 				<Filter
 					Name="States"
-					Filter="">
+					>
 					<File
-						RelativePath="..\source\WorldThread\States\CharacterState.cpp">
+						RelativePath="..\source\WorldThread\States\CharacterState.cpp"
+						>
 					</File>
 					<File
-						RelativePath="..\source\WorldThread\States\CharacterState.h">
+						RelativePath="..\source\WorldThread\States\CharacterState.h"
+						>
 					</File>
 					<File
-						RelativePath="..\source\WorldThread\States\SessionState.cpp">
+						RelativePath="..\source\WorldThread\States\SessionState.cpp"
+						>
 					</File>
 					<File
-						RelativePath="..\source\WorldThread\States\SessionState.h">
+						RelativePath="..\source\WorldThread\States\SessionState.h"
+						>
 					</File>
 				</Filter>
 			</Filter>
 			<Filter
 				Name="Network"
-				Filter="">
+				>
 				<File
-					RelativePath="..\source\Network\SocketService.cpp">
+					RelativePath="..\source\Network\SocketService.cpp"
+					>
 				</File>
 				<File
-					RelativePath="..\source\Network\SocketState.cpp">
+					RelativePath="..\source\Network\SocketState.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="GMBind"
+				>
+				<File
+					RelativePath="..\source\GMBind\gmArrayLib.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmCall.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmGCRoot.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmGCRootUtil.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmHelpers.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmMathLib.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmStringLib.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmSystemLib.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmVector3Lib.cpp"
+					>
 				</File>
 			</Filter>
 		</Filter>

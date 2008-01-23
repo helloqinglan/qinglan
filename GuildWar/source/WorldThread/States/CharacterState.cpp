@@ -84,26 +84,21 @@ bool CharacterState::enumCharacter(WorldPacket& packet)
 
 	u_char count = 0;
 	data << count;
-/*
+
 	// 查询角色列表
-	ByteBuffer queryArg;
-	queryArg << dynamic_cast<WorldClientService*>(m_socketService)->getAccountID();
-	ByteBuffer queryRet;
-	if (getDatabase()->query((u_short)DBWSID_GET_CHARACTERS, queryArg, queryRet))
+	QueryResult* result = DATABASE->query("SELECT id, name, pos_x, pos_y, pos_z, map, data FROM characters");
+	if (result)
 	{
-		queryRet >> count;
-		assert(count == (queryRet.length() / sizeof(u_int)));
-
-		for (u_char i = 0; i < count; ++i)
+		do
 		{
-			u_int charid;
-			queryRet >> charid;
+			Field* field = result->fetch();
+			assert(field);
 
-			Player* ply = new Player(dynamic_cast<WorldClientService*>(m_socketService), charid, true);
-			delete ply;
+			++count;
 		}
+		while(result->nextRow());
 	}
-*/
+
 	data.put<u_char>(0, count);
 	return sendData(data);
 }
