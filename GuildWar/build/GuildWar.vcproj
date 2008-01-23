@@ -325,6 +325,14 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Object"
+				>
+				<File
+					RelativePath="..\include\Object\ObjectDefines.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="source"
@@ -508,6 +516,10 @@
 					RelativePath="..\source\GMBind\gmVector3Lib.cpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Object"
+				>
 			</Filter>
 		</Filter>
 	</Files>

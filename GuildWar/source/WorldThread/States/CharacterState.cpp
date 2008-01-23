@@ -7,6 +7,7 @@
 
 #include "GuildWarPch.h"
 #include "CharacterState.h"
+#include "Database/Database.h"
 #include "WorldThread/WorldSocket.h"
 
 
