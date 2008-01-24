@@ -10,6 +10,8 @@
 #include "Database/Database.h"
 #include "WorldThread/WorldSocket.h"
 
+#include "Object/ObjectDefines.h"
+
 
 // *-----------------------------------------------------------------
 //
@@ -24,6 +26,12 @@
 #define SMSG_CHAR_CREATE		58		// 创建角色
 #define SMSG_CHAR_ENUM			59		// 角色列表
 #define SMSG_CHAR_DELETE		60		// 删除角色
+
+// 角色创建的结果码
+enum E_CHAR_CREATE_CODE
+{
+	CHAR_CREATE_FAILED	= 0x30,	// 失败
+};
 //
 // *-----------------------------------------------------------------
 
@@ -75,6 +83,17 @@ bool CharacterState::pingRequest(WorldPacket& packet)
 // 创建角色
 bool CharacterState::createCharacter(WorldPacket& packet)
 {
+	// ***TODO*** 没有检查数据的合法性, 也没有检测重名
+
+	std::string name;
+	u_char race, clas;
+
+	packet >> name;
+	packet >> race;
+	packet >> clas;
+
+	WorldPacket data(SMSG_CHAR_CREATE, 1);
+
 	return true;
 }
 
@@ -95,12 +114,63 @@ bool CharacterState::enumCharacter(WorldPacket& packet)
 			Field* field = result->fetch();
 			assert(field);
 
+			u_int id = field[0].getUInt();
+			std::string name = field[1].getString();
+			float pos_x = field[2].getFloat();
+			float pos_y = field[3].getFloat();
+			float pos_z = field[4].getFloat();
+			int map = field[5].getInt();
+			std::string datastr = field[6].getString();
+
+			// 发送的数据
+
+			data << MAKE_GUID(id, HIGHGUID_PLAYER);		// GUID
+			data << name;								// 角色名
+
+			data << (u_char)0;							// ***TODO*** : 种族
+			data << (u_char)0;							// ***TODO*** : 职业
+			data << (u_char)0;							// ***TODO*** : 性别
+
+			data << (u_int)0;							// ***TODO*** : PLAYER_BYTES
+			data << (u_char)0;							// ***TODO*** : PLAYER_BYTES_2
+
+			data << (u_char)1;							// ***TODO*** : 等级
+			data << (u_int)0;							// ***TODO*** : ZoneId 区域ID
+			data << map;								// ***TODO*** : 地图ID
+
+			data << pos_x;								// 坐标
+			data << pos_y;
+			data << pos_z;
+
+			data << (u_int)0;							// ***TODO*** : 公会ID
+
+			data << (u_char)0;							// ***TODO*** : 未知 (different values on off, looks like flags)
+			data << (u_char)0;							// ***TODO*** : 显示标志 (见Player.cpp 1123行)
+			data << (u_char)0xa0;						// ***TODO*** : 未知
+			data << (u_char)0;							// ***TODO*** : 未知
+			data << (u_char)1;							// ***TODO*** : 未知
+
+			data << (u_int)0;							// ***TODO*** : 宠物信息
+			data << (u_int)0;
+			data << (u_int)0;
+
+			// ***TODO*** : 装备信息
+			for (int i = 0; i < EQUIPMENT_SLOT_END; ++i)
+			{
+				data << (u_int)0;						// ***TODO*** : 显示ID
+				data << (u_char)0;						// ***TODO*** : InventoryType (什么意思?)
+			}
+
+			data << (u_int)0;							// ***TODO*** : 未知 (first bag display id)
+			data << (u_char)0;							// ***TODO*** : 未知 (first bag inventory type)
+
 			++count;
 		}
 		while(result->nextRow());
 	}
 
 	data.put<u_char>(0, count);
+
 	return sendData(data);
 }
 

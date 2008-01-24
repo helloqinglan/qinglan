@@ -329,7 +329,27 @@
 				Name="Object"
 				>
 				<File
+					RelativePath="..\include\Object\Entity.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\Object\EntityManager.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\Object\ObjectDefines.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\Object\UpdateFields.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Component"
+				>
+				<File
+					RelativePath="..\include\Component\ComponentBase.h"
 					>
 				</File>
 			</Filter>
@@ -519,6 +539,18 @@
 			</Filter>
 			<Filter
 				Name="Object"
+				>
+				<File
+					RelativePath="..\source\Object\Entity.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\Object\EntityManager.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Component"
 				>
 			</Filter>
 		</Filter>
