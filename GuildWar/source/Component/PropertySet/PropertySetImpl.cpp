@@ -1,18 +1,14 @@
 
 // *-----------------------------------------------------------------
 //
-// 游戏实体对象实现
+// 属性集组件实现
 //
 // *-----------------------------------------------------------------
 
 #include "GuildWarPch.h"
-#include "Object/Entity.h"
+#include "PropertySetImpl.h"
 
-Entity::Entity(EntityType eType)
-: m_entityType(eType)
-{
-}
-
-Entity::~Entity()
+PropertySetImpl::PropertySetImpl(Entity* entity)
+: PropertySetComp(entity)
 {
 }

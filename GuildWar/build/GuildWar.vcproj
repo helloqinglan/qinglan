@@ -352,6 +352,10 @@
 					RelativePath="..\include\Component\ComponentBase.h"
 					>
 				</File>
+				<File
+					RelativePath="..\include\Component\PropertySetComp.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -552,6 +556,18 @@
 			<Filter
 				Name="Component"
 				>
+				<Filter
+					Name="PropertySet"
+					>
+					<File
+						RelativePath="..\source\Component\PropertySet\PropertySetImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\source\Component\PropertySet\PropertySetImpl.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 	</Files>
