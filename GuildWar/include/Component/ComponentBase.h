@@ -24,6 +24,8 @@ public:
 	{
 	}
 
+	virtual ~ComponentBase() {}
+
 	// 查询组件类型
 	ComopnentTypes componentType() const { return m_componentType; }
 

@@ -60,6 +60,8 @@ void WorldSocket::accepted()
 	packet.initialize(SMSG_AUTH_CHALLENGE);
 	packet << (u_int)PACKET_CRYPT_SEED;
 	sendData(packet);
+
+	ACE_DEBUG ((GAME_DEBUG ACE_TEXT("WorldSocket::accepted 已发送随机种子.\n")));
 }
 
 // 连接关闭

@@ -59,6 +59,7 @@ struct stLogonCheck_S
 	unsigned char   error;
 	unsigned char   M2[20];
 	unsigned int	unk2;
+	unsigned short	unk3;
 };
 
 struct stRealmList_S

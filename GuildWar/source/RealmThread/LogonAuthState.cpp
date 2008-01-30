@@ -53,7 +53,6 @@ bool LogonAuthState::process(void* arg)
 		return logonCheck();
 	else
 	{
-		assert(0 && "LogonAuthState::process unkown cmd.");
 		ACE_ERROR ((GAME_ERROR ACE_TEXT("LogonAuthState::process 未知的消息码: %d.\n"), cmd));
 		return false;
 	}
@@ -89,9 +88,9 @@ bool LogonAuthState::logonRequest()
 	// ***TODO*** 把64这个magic number用宏代替
 	char login_name[64];
 	memset(login_name, 0, 64);
-	strncpy(login_name, (const char *)reqData->I, reqData->I_len);
+	strncpy_s(login_name, (const char *)reqData->I, reqData->I_len);
 	std::string loginName = login_name;
-	ACE_DEBUG ((GAME_DEBUG ACE_TEXT("[Auth] 用户 %s 请求登录.\n"), login_name));
+	ACE_DEBUG ((GAME_DEBUG ACE_TEXT("LogonAuthState::logonRequest 用户 %s 请求登录.\n"), login_name));
 
 	// 比较用户名是否与数据库中的用户名相同
 	if (REALM_THREAD->accountName() != loginName)
@@ -228,6 +227,7 @@ bool LogonAuthState::logonCheck()
 		proof.cmd = AUTH_LOGON_CHECK;
 		proof.error = 0;
 		proof.unk2 = 0;
+		proof.unk3 = 0;
 
 		// 保存session key数据
 		REALM_THREAD->sessionK(K);
@@ -236,14 +236,18 @@ bool LogonAuthState::logonCheck()
 
 		sendData((const char*)&proof, sizeof(proof));
 
+		ACE_DEBUG ((GAME_DEBUG ACE_TEXT("LogonAuthState::logonCheck 验证成功, 进入服务器列表状态.\n")));
+
 		// 验证成功 转换到服务器列表状态
 		transition(new RealmListState(m_socketService));
 	}
 	else
 	{
 		// 验证失败
-		char data[2] = {AUTH_LOGON_CHECK, 4};
+		char data[4] = {AUTH_LOGON_CHECK, CE_NO_ACCOUNT, 3, 0};
 		sendData(data, sizeof(data));
+
+		ACE_DEBUG ((GAME_DEBUG ACE_TEXT("LogonAuthState::logonCheck 验证失败.\n")));
 	}
 
 	return true;

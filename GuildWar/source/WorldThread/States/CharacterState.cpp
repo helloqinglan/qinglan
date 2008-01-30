@@ -11,6 +11,7 @@
 #include "WorldThread/WorldSocket.h"
 
 #include "Object/ObjectDefines.h"
+#include "Object/EntityManager.h"
 
 
 // *-----------------------------------------------------------------
@@ -30,6 +31,8 @@
 // 角色创建的结果码
 enum E_CHAR_CREATE_CODE
 {
+	CHAR_CREATE_SUCCESS	= 0x2E,	// 成功
+	CHAR_CREATE_ERROR	= 0x2F,	// 错误
 	CHAR_CREATE_FAILED	= 0x30,	// 失败
 };
 //
@@ -83,17 +86,20 @@ bool CharacterState::pingRequest(WorldPacket& packet)
 // 创建角色
 bool CharacterState::createCharacter(WorldPacket& packet)
 {
-	// ***TODO*** 没有检查数据的合法性, 也没有检测重名
-
-	std::string name;
-	u_char race, clas;
-
-	packet >> name;
-	packet >> race;
-	packet >> clas;
-
 	WorldPacket data(SMSG_CHAR_CREATE, 1);
 
+	Entity* entity = ENTITYMANAGER->createEntity(packet);
+	if (!entity)
+	{
+		data << (u_char)CHAR_CREATE_ERROR;
+	}
+	else
+	{
+		entity->save();
+		data << (u_char)CHAR_CREATE_SUCCESS;
+	}
+
+	sendData(data);
 	return true;
 }
 
@@ -167,6 +173,8 @@ bool CharacterState::enumCharacter(WorldPacket& packet)
 			++count;
 		}
 		while(result->nextRow());
+
+		delete result;
 	}
 
 	data.put<u_char>(0, count);

@@ -164,6 +164,7 @@ bool RealmThread::loadAccounts()
 	m_accountPass = pass;
 
 	ACE_DEBUG ((GAME_DEBUG ACE_TEXT("RealmThread::loadAccounts 帐号数据加载成功.\n")));
+	delete result;
 
 	return true;
 }

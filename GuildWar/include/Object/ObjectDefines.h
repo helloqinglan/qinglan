@@ -51,3 +51,10 @@ enum EquipmentSlots
 
     EQUIPMENT_SLOT_END			= 19
 };
+
+
+// UNIT_FIELD_FLAGSжпиХжц╣дязбК
+enum UnitFlags
+{
+	UNIT_FLAG_UNKNOWN1	= 0x00000008,
+};

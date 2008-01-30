@@ -9,6 +9,7 @@
 #include "WorldThread/WorldThread.h"
 #include "WorldThread/WorldSocket.h"
 #include "States/SessionState.h"
+#include "Object/EntityManager.h"
 
 // ***TODO*** 世界服务监听端口应该配置到数据库中, 登录服务的服务器列表也从数据库里取
 #define WORLDS_LISTEN_PORT 8025
@@ -99,6 +100,12 @@ int WorldThread::svc()
 
 int WorldThread::open()
 {
+	if (!ENTITYMANAGER->initialize())
+	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("WorldThread::open 实体管理器初始化失败.\n")));
+		return -1;
+	}
+
 	if (activate(THR_NEW_LWP) == -1)
 	{
 		ACE_ERROR ((GAME_ERROR ACE_TEXT("WorldThread::open 登录处理线程启动失败.\n")));

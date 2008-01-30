@@ -39,7 +39,7 @@ public:
         if(m_filedValue)
         {
             u_int64 value;
-            sscanf(m_filedValue, "%I64u", &value);
+            sscanf_s(m_filedValue, "%I64u", &value);
             return value;
         }
         else

@@ -55,7 +55,7 @@ bool SessionState::process(void* arg)
 		return logonCheck(*packet);
 	else
 	{
-		assert(0 && "SessionState::process unkown cmd.");
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("SessionState::process 未知的消息码: %d.\n"), packet->getOpcode()));
 		return false;
 	}
 
@@ -84,6 +84,8 @@ bool SessionState::logonCheck(WorldPacket& packet)
 	std::string account;
 	packet >> account;
 
+	ACE_DEBUG ((GAME_DEBUG ACE_TEXT("SessionState::logonCheck 帐号 %s 请求进入游戏世界.\n"), account.c_str()));
+
 	// 客户端种子
 	u_int clientSeed;
 	packet >> clientSeed;
@@ -95,6 +97,8 @@ bool SessionState::logonCheck(WorldPacket& packet)
 	// 检查是否同一个用户
 	if (REALM_THREAD->accountName() != account)
 	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("SessionState::logonCheck 请求进入游戏世界的帐号 %s 与登录验证的帐号不一致.\n"), account.c_str()));
+
 		WorldPacket pkt(SMSG_AUTH_RESPONSE, 1);
 		pkt << (u_char) AUTH_UNKNOWN_ACCOUNT;
 		return sendData(pkt);
@@ -124,6 +128,8 @@ bool SessionState::logonCheck(WorldPacket& packet)
 	BigNumber serverS = REALM_THREAD->sessionv();
 	if (std::string(v.AsHexStr()) != std::string(serverS.AsHexStr()))
 	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("SessionState::logonCheck 帐号 %s 的v值错误, 不能进入游戏世界.\n"), account.c_str()));
+
 		WorldPacket pkt(SMSG_AUTH_RESPONSE, 1);
 		pkt << (u_char) AUTH_UNKNOWN_ACCOUNT;
 		return sendData(pkt);
@@ -145,6 +151,8 @@ bool SessionState::logonCheck(WorldPacket& packet)
 
 	if (memcmp(sha.GetDigest(), digest, 20))
 	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("SessionState::logonCheck 帐号 %s 的验证信息错误, 不能进入游戏世界.\n"), account.c_str()));
+
 		WorldPacket pkt(SMSG_AUTH_RESPONSE, 1);
 		pkt << (u_char)AUTH_FAILED;
 		return sendData(pkt);
@@ -153,9 +161,15 @@ bool SessionState::logonCheck(WorldPacket& packet)
 	// 设置 加密密钥
 	dynamic_cast<WorldSocket*>(m_socketService)->setCryptKey(K.AsByteArray(), 40);
 
+	ACE_DEBUG ((GAME_DEBUG ACE_TEXT("SessionState::logonCheck 帐号 %s 验证成功, 进入游戏世界.\n"), account.c_str()));
+
 	// 认证成功
-	WorldPacket pkt(SMSG_AUTH_RESPONSE, 1);
+	WorldPacket pkt(SMSG_AUTH_RESPONSE, 11);
 	pkt << (u_char)AUTH_OK;
+	pkt << (u_int)0;		// 未知的随机数据
+	pkt << (u_char)2;
+	pkt << (u_int)0;
+	pkt << (u_char)1;		// 是否开启TBC
 	sendData(pkt);
 /*
 	// 派发 "帐号验证成功" 事件

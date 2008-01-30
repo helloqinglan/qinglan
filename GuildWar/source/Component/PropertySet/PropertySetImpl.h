@@ -13,4 +13,46 @@ class PropertySetImpl : public PropertySetComp
 {
 public:
 	PropertySetImpl(Entity* entity);
+	~PropertySetImpl();
+
+
+	// 获取属性数据
+	const int& getIntValue(u_short index) const { return m_intValues[index]; }
+
+	const u_int& getUintValue(u_short index) const { return m_uintValues[index]; }
+
+	const u_int64& getUint64Value(u_short index) const { return *((u_int64*)&(m_uintValues[index])); }
+
+	const float& getFloatValue(u_short index) const { return m_floatValues[index]; }
+
+
+	// 设置属性数据
+	void setIntValue(u_short index, int value);
+
+	void setUintValue(u_short index, u_int value);
+
+	void setUint64Value(u_short index, u_int64 value);
+
+	void setFloatValue(u_short index, float value);
+
+
+	// ***TODO*** 数据库存储的数据改为二进制格式
+	// 获取用于存库的属性集数据
+	std::string getPropertyString() const;
+
+	// 从数据库保存的字符串加载属性值数据
+	bool loadValues(const std::string& data);
+
+private:
+	// 属性集中的数据只有一份, 但是不同field中的数据类型会有所不同
+	union
+	{
+		int* m_intValues;
+		u_int* m_uintValues;
+		float* m_floatValues;
+	};
+
+	u_int* m_uintValuesMirror;		// 数据镜象
+
+	u_short m_valuesCount;			// 属性个数
 };
