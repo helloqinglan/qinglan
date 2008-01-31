@@ -7,8 +7,8 @@
 
 #include "GuildWarPch.h"
 #include "Component/PropertySetComp.h"
-#include "Object/UpdateFields.h"
-#include "Object/Entity.h"
+#include "Entity/UpdateFields.h"
+#include "Entity/Entity.h"
 #include "Database/Database.h"
 #include <sstream>
 

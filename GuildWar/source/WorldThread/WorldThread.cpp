@@ -9,7 +9,7 @@
 #include "WorldThread/WorldThread.h"
 #include "WorldThread/WorldSocket.h"
 #include "States/SessionState.h"
-#include "Object/EntityManager.h"
+#include "Entity/EntityManager.h"
 
 // ***TODO*** 世界服务监听端口应该配置到数据库中, 登录服务的服务器列表也从数据库里取
 #define WORLDS_LISTEN_PORT 8025

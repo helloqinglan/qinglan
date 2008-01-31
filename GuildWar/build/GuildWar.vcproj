@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ACEd.lib libeay32.lib libmySQL.lib gmLib.lib"
+				AdditionalDependencies="ACEd.lib zlib.lib libeay32.lib libmySQL.lib gmLib.lib"
 				OutputFile="$(OutDir)/GuildWar.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../lib/debug"
@@ -143,7 +143,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ACE.lib libeay32.lib libmySQL.lib gmLib.lib"
+				AdditionalDependencies="ACE.lib zlib.lib libeay32.lib libmySQL.lib gmLib.lib"
 				OutputFile="$(OutDir)/GuildWar.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../lib/release"
@@ -326,7 +326,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Object"
+				Name="Entity"
 				>
 				<File
 					RelativePath="..\include\Object\Entity.h"
@@ -542,14 +542,14 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Object"
+				Name="Entity"
 				>
 				<File
-					RelativePath="..\source\Object\Entity.cpp"
+					RelativePath="..\source\Entity\Entity.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\source\Object\EntityManager.cpp"
+					RelativePath="..\source\Entity\EntityManager.cpp"
 					>
 				</File>
 			</Filter>

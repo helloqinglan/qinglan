@@ -10,8 +10,8 @@
 #include "Database/Database.h"
 #include "WorldThread/WorldSocket.h"
 
-#include "Object/ObjectDefines.h"
-#include "Object/EntityManager.h"
+#include "Entity/ObjectDefines.h"
+#include "Entity/EntityManager.h"
 
 
 // *-----------------------------------------------------------------
@@ -34,6 +34,12 @@ enum E_CHAR_CREATE_CODE
 	CHAR_CREATE_SUCCESS	= 0x2E,	// 成功
 	CHAR_CREATE_ERROR	= 0x2F,	// 错误
 	CHAR_CREATE_FAILED	= 0x30,	// 失败
+};
+
+// 角色删除的结果码
+enum E_CHAR_DELETE_CODE
+{
+	CHAR_DELETE_SUCCESS	= 0x3A,	// 成功
 };
 //
 // *-----------------------------------------------------------------
@@ -185,6 +191,16 @@ bool CharacterState::enumCharacter(WorldPacket& packet)
 // 删除角色
 bool CharacterState::deleteCharacter(WorldPacket& packet)
 {
+	u_int64 guid;
+	packet >> guid;
+
+	// ***TODO*** 删除与该角色相关的所有数据
+	DATABASE->pexecute("DELETE FROM `characters` WHERE `id` = '%u'", GUID_LOPART(guid));
+
+	WorldPacket pkt(SMSG_CHAR_DELETE, 1);
+	pkt << (u_char)CHAR_DELETE_SUCCESS;
+	sendData(pkt);
+
 	return true;
 }
 

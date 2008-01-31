@@ -28,5 +28,8 @@ private:
 
 	bool sendData(WorldPacket& packet);
 
+	// 发送启用客户端Addons的数据包
+	void sendAddonPacket(WorldPacket& packet);
+
 private:
 };

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Object/Entity.h"
+#include "Entity/Entity.h"
 
 class WorldPacket;
 

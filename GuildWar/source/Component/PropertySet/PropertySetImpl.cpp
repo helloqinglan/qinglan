@@ -6,8 +6,8 @@
 // *-----------------------------------------------------------------
 
 #include "GuildWarPch.h"
-#include "Object/entity.h"
-#include "Object/UpdateFields.h"
+#include "Entity/entity.h"
+#include "Entity/UpdateFields.h"
 #include "PropertySetImpl.h"
 #include "Util/Util.h"
 #include <sstream>
