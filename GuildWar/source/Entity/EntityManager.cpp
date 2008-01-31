@@ -9,7 +9,7 @@
 #include "WorldThread/WorldPacket.h"
 #include "Entity/EntityManager.h"
 #include "Entity/UpdateFields.h"
-#include "Entity/ObjectDefines.h"
+#include "Entity/EntityDefines.h"
 #include "Database/Database.h"
 
 // ***TODO*** 这样的路径包含太丑陋, 但确实又不想暴露到include目录

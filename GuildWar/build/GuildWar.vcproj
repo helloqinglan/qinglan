@@ -329,19 +329,19 @@
 				Name="Entity"
 				>
 				<File
-					RelativePath="..\include\Object\Entity.h"
+					RelativePath="..\include\Entity\Entity.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\Object\EntityManager.h"
+					RelativePath="..\include\Entity\EntityDefines.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\Object\ObjectDefines.h"
+					RelativePath="..\include\Entity\EntityManager.h"
 					>
 				</File>
 				<File
-					RelativePath="..\include\Object\UpdateFields.h"
+					RelativePath="..\include\Entity\UpdateFields.h"
 					>
 				</File>
 			</Filter>

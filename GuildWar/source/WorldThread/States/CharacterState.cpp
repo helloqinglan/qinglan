@@ -10,7 +10,7 @@
 #include "Database/Database.h"
 #include "WorldThread/WorldSocket.h"
 
-#include "Entity/ObjectDefines.h"
+#include "Entity/EntityDefines.h"
 #include "Entity/EntityManager.h"
 
 
