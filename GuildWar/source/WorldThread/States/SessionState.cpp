@@ -20,13 +20,13 @@
 #define PACKET_CRYPT_SEED 0xDEADBABE
 
 // 该状态下处理的客户端消息码
-#define CMSG_PING				476		// Ping包
-#define CMSG_AUTH_SESSION		493		// 验证请求
+#define CMSG_PING						476		// Ping包
+#define CMSG_AUTH_SESSION				493		// 验证请求
 
 // 该状态下服务器会发送的消息码
-#define SMSG_PONG				477		// Ping返回包
-#define SMSG_AUTH_RESPONSE		494		// 认证响应
-#define SMSG_ADDON_INFO			751		// 启用客户端Addons
+#define SMSG_PONG						477		// Ping返回包
+#define SMSG_AUTH_RESPONSE				494		// 认证响应
+#define SMSG_ADDON_INFO					751		// 启用客户端Addons
 
 // 错误码
 enum LoginErrorCode

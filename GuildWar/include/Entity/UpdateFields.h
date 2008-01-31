@@ -29,6 +29,8 @@ enum EContainerFields
 
 enum EUnitFields
 {
+	UNIT_FIELD_LEVEL					= OBJECT_END + 0x001C,	// 角色等级, Size: 1, Type: INT
+
 	UNIT_FIELD_BYTES_0					= OBJECT_END + 0x001E,	// 种族、职业、性别、能量类型, Size: 1, Type: INT
 	UNIT_FIELD_FLAGS					= OBJECT_END + 0x0028,	// ***TODO***, Size: 1, Type: INT
 
@@ -49,8 +51,6 @@ enum EPlayerFields
 	PLAYER_BYTES						= UNIT_END + 0x0005,	// 角色外观信息, Size: 1, Type: BYTES
 	PLAYER_BYTES_2						= UNIT_END + 0x0006,	// 角色外观信息, Size: 1, Type: BYTES
 	PLAYER_BYTES_3						= UNIT_END + 0x0007,	// 角色性别, Size: 1, Type: BYTES
-
-	UNIT_FIELD_LEVEL					= UNIT_END + 0x001C,	// 角色等级, Size: 1, Type: INT
 
 	PLAYER_FIELD_WATCHED_FACTION_INDEX	= UNIT_END + 0x0485,	// ***TODO***, Size: 1, Type: INT
 

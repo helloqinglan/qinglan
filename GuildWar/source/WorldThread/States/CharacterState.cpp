@@ -17,16 +17,19 @@
 // *-----------------------------------------------------------------
 //
 // 该状态下处理的客户端消息码
-#define CMSG_PING				476		// Ping包
-#define CMSG_CHAR_CREATE		54		// 创建角色
-#define CMSG_CHAR_ENUM			55		// 角色列表
-#define CMSG_CHAR_DELETE		56		// 删除角色
+#define CMSG_PING						476		// Ping包
+#define CMSG_CHAR_CREATE				54		// 创建角色
+#define CMSG_CHAR_ENUM					55		// 角色列表
+#define CMSG_CHAR_DELETE				56		// 删除角色
+#define CMSG_PLAYER_LOGIN				61		// 进入游戏
+#define CMSG_REALM_SPLIT_INFO_REQUEST	908		// ***TODO*** 在角色选择界面出现, 不知道做什么的
 
 // 该状态下服务器会发送的消息码
-#define SMSG_PONG				477		// Ping返回包
-#define SMSG_CHAR_CREATE		58		// 创建角色
-#define SMSG_CHAR_ENUM			59		// 角色列表
-#define SMSG_CHAR_DELETE		60		// 删除角色
+#define SMSG_PONG						477		// Ping返回包
+#define SMSG_CHAR_CREATE				58		// 创建角色
+#define SMSG_CHAR_ENUM					59		// 角色列表
+#define SMSG_CHAR_DELETE				60		// 删除角色
+#define SMSG_REALM_SPLIT_INFO_RESPONSE	907		// 对908的应答
 
 // 角色创建的结果码
 enum E_CHAR_CREATE_CODE
@@ -65,9 +68,13 @@ bool CharacterState::process(void* arg)
 		return enumCharacter(*packet);
 	else if (packet->getOpcode() == CMSG_CHAR_DELETE)
 		return deleteCharacter(*packet);
+	else if (packet->getOpcode() == CMSG_PLAYER_LOGIN)
+		return playerLogin(*packet);
+	else if (packet->getOpcode() == CMSG_REALM_SPLIT_INFO_REQUEST)
+		return realmSplitInfo(*packet);
 	else
 	{
-		assert(0 && "CharacterState::process unkown cmd.");
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("CharacterState::process 未知的消息码: %d.\n"), packet->getOpcode()));
 		return false;
 	}
 
@@ -118,63 +125,21 @@ bool CharacterState::enumCharacter(WorldPacket& packet)
 	data << count;
 
 	// 查询角色列表
-	QueryResult* result = DATABASE->query("SELECT id, name, pos_x, pos_y, pos_z, map, data FROM characters");
+	QueryResult* result = DATABASE->query("SELECT `id` FROM `characters`");
 	if (result)
 	{
 		do
 		{
 			Field* field = result->fetch();
-			assert(field);
-
 			u_int id = field[0].getUInt();
-			std::string name = field[1].getString();
-			float pos_x = field[2].getFloat();
-			float pos_y = field[3].getFloat();
-			float pos_z = field[4].getFloat();
-			int map = field[5].getInt();
-			std::string datastr = field[6].getString();
 
-			// 发送的数据
+			Entity* entity = ENTITYMANAGER->createEntity(Entity::Type_Player);
+			if (!entity->load(id))
+				continue;
 
-			data << MAKE_GUID(id, HIGHGUID_PLAYER);		// GUID
-			data << name;								// 角色名
+			entity->buildEnumPacket(data);
 
-			data << (u_char)0;							// ***TODO*** : 种族
-			data << (u_char)0;							// ***TODO*** : 职业
-			data << (u_char)0;							// ***TODO*** : 性别
-
-			data << (u_int)0;							// ***TODO*** : PLAYER_BYTES
-			data << (u_char)0;							// ***TODO*** : PLAYER_BYTES_2
-
-			data << (u_char)1;							// ***TODO*** : 等级
-			data << (u_int)0;							// ***TODO*** : ZoneId 区域ID
-			data << map;								// ***TODO*** : 地图ID
-
-			data << pos_x;								// 坐标
-			data << pos_y;
-			data << pos_z;
-
-			data << (u_int)0;							// ***TODO*** : 公会ID
-
-			data << (u_char)0;							// ***TODO*** : 未知 (different values on off, looks like flags)
-			data << (u_char)0;							// ***TODO*** : 显示标志 (见Player.cpp 1123行)
-			data << (u_char)0xa0;						// ***TODO*** : 未知
-			data << (u_char)0;							// ***TODO*** : 未知
-			data << (u_char)1;							// ***TODO*** : 未知
-
-			data << (u_int)0;							// ***TODO*** : 宠物信息
-			data << (u_int)0;
-			data << (u_int)0;
-
-			// ***TODO*** : 装备信息
-			for (int i = 0; i < EQUIPMENT_SLOT_END; ++i)
-			{
-				data << (u_int)0;						// ***TODO*** : 显示ID
-				data << (u_char)0;						// ***TODO*** : InventoryType (什么意思?)
-			}
-
-			data << (u_int)0;							// ***TODO*** : 未知 (first bag display id)
-			data << (u_char)0;							// ***TODO*** : 未知 (first bag inventory type)
+			delete entity;
 
 			++count;
 		}
@@ -183,7 +148,8 @@ bool CharacterState::enumCharacter(WorldPacket& packet)
 		delete result;
 	}
 
-	data.put<u_char>(0, count);
+	if (count)
+		data.put<u_char>(0, count);
 
 	return sendData(data);
 }
@@ -199,6 +165,35 @@ bool CharacterState::deleteCharacter(WorldPacket& packet)
 
 	WorldPacket pkt(SMSG_CHAR_DELETE, 1);
 	pkt << (u_char)CHAR_DELETE_SUCCESS;
+	sendData(pkt);
+
+	return true;
+}
+
+// 进入游戏
+bool CharacterState::playerLogin(WorldPacket& packet)
+{
+/*	Entity* entity = ENTITYMANAGER->createEntity(Entity::Type_Player);
+	if (!entity->load(id))
+	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("CharacterState::playerLogin 从数据库加载角色数据失败: %d.\n"), packet->getOpcode()));
+		return false;
+	}
+*/
+	return true;
+}
+
+// ***TODO*** 未知请求
+bool CharacterState::realmSplitInfo(WorldPacket& packet)
+{
+	u_int unk;
+	packet >> unk;
+
+	std::string split_data = "01/01/01";
+	WorldPacket pkt(SMSG_REALM_SPLIT_INFO_RESPONSE, split_data.size() + 9);
+	pkt << unk;
+	pkt << (u_int)0;
+	pkt << split_data;
 	sendData(pkt);
 
 	return true;

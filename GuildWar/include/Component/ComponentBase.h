@@ -16,6 +16,7 @@ public:
 	enum ComopnentTypes
 	{
 		PropertySet,			// 属性集
+		UnitInterf,				// 生物接口
 	};
 
 public:

@@ -31,6 +31,12 @@ private:
 	// 删除角色
 	bool deleteCharacter(WorldPacket& packet);
 
+	// 进入游戏
+	bool playerLogin(WorldPacket& packet);
+
+	// ***TODO*** 未知请求
+	bool realmSplitInfo(WorldPacket& packet);
+
 	bool sendData(WorldPacket& packet);
 
 private:

@@ -19,6 +19,7 @@ public:
 	bool initialize();
 
 	// 创建实体对象
+	// ***TODO*** 这里不需要指定实体类型, 对于从数据库创建的实体, 在load时才知道类型
 	Entity* createEntity(Entity::EntityType eType);
 
 	// 客户端创建角色

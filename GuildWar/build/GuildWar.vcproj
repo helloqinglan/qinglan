@@ -356,6 +356,10 @@
 					RelativePath="..\include\Component\PropertySetComp.h"
 					>
 				</File>
+				<File
+					RelativePath="..\include\Component\UnitInterfComp.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -565,6 +569,18 @@
 					</File>
 					<File
 						RelativePath="..\source\Component\PropertySet\PropertySetImpl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="UnitInterf"
+					>
+					<File
+						RelativePath="..\source\Component\UnitInterf\UnitInterfImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\source\Component\UnitInterf\UnitInterfImpl.h"
 						>
 					</File>
 				</Filter>

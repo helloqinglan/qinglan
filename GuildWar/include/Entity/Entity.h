@@ -9,6 +9,8 @@
 
 #include "Component/ComponentBase.h"
 
+class WorldPacket;
+
 class Entity
 {
 public:
@@ -38,24 +40,24 @@ public:
 	template<class T>
 	T* getComponent(ComponentBase::ComopnentTypes typeID) const;
 
+	void buildEnumPacket(WorldPacket& packet);
+
+	// ***TODO*** 做一个独立的存储组件 DataIOComp
 	// 存数据库
 	bool save();
+
+	// 从数据库加载
+	// ***TODO*** 不同类型的entity读取的表会不一样, 比如玩家跟NPC, 如何区分?
+	bool load(u_int id);
 
 private:
 	// ***TODO*** 现在做的简单处理, entity中创建了所有的Component
 	typedef std::vector<ComponentBase*> ComponentList;
 	ComponentList m_componentList;
 
+	// ***TODO*** entityType是冗余数据, 属性集中记录了实体类型
+	// 但是在entity的PropertySet组件创建时又可能需要这个类型, 而此时属性还未创建
+	// 想一个好的方法解决这个矛盾, 把这里的entityType变量去掉
 	EntityType m_entityType;
 	std::string m_entityName;
-
-	// ***TODO*** 这些属性不是所有的entity都有的
-	u_int m_entityRace;
-	u_int m_entityClass;
-
-	u_int m_mapID;
-	float m_positionX;
-	float m_positionY;
-	float m_positionZ;
-	float m_orientation;
 };
