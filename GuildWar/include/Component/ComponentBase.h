@@ -7,7 +7,7 @@
 
 #pragma once
 
-class Entity;
+#include "GuildWarFwd.h"
 
 class ComponentBase
 {
@@ -17,6 +17,7 @@ public:
 	{
 		PropertySet,			// 属性集
 		UnitInterf,				// 生物接口
+		DataIO,					// 数据存取
 	};
 
 public:

@@ -19,6 +19,7 @@
 #include <string>
 #include <fstream>
 #include <algorithm>
+#include <sstream>
 
 // boost
 

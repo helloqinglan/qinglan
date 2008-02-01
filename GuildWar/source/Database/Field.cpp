@@ -21,12 +21,12 @@ Field::Field(Field &f)
     name = f.getName();
 
     if (value && (m_filedValue = new char[strlen(value) + 1]))
-        strcpy(m_filedValue, value);
+        strcpy_s(m_filedValue, strlen(value) + 1, value);
     else
         m_filedValue = 0;
 
     if (name && (m_filedName = new char[strlen(name) + 1]))
-        strcpy(m_filedName, name);
+        strcpy_s(m_filedName, strlen(name) + 1, name);
     else
         m_filedName = 0;
 
@@ -37,12 +37,12 @@ Field::Field(const char *value, const char *name, enum Field::DataTypes type)
 : m_filedType(type)
 {
     if (value && (m_filedValue = new char[strlen(value) + 1]))
-        strcpy(m_filedValue, value);
+        strcpy_s(m_filedValue, strlen(value) + 1, value);
     else
         m_filedValue = 0;
 
     if (name && (m_filedName = new char[strlen(name) + 1]))
-        strcpy(m_filedName, name);
+        strcpy_s(m_filedName, strlen(name) + 1, name);
     else
         m_filedName = 0;
 }
@@ -60,7 +60,7 @@ void Field::setValue(const char *value)
     if (value)
     {
         m_filedValue = new char[strlen(value) + 1];
-        strcpy(m_filedValue, value);
+        strcpy_s(m_filedValue, strlen(value) + 1, value);
     }
     else
         m_filedValue = 0;
@@ -73,7 +73,7 @@ void Field::getName(const char *name)
     if (name)
     {
         m_filedName = new char[strlen(name) + 1];
-        strcpy(m_filedName, name);
+        strcpy_s(m_filedName, strlen(name) + 1, name);
     }
     else
         m_filedName = 0;

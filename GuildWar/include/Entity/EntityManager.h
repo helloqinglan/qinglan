@@ -9,8 +9,6 @@
 
 #include "Entity/Entity.h"
 
-class WorldPacket;
-
 class EntityManager
 {
 	friend class ACE_Singleton<EntityManager, ACE_Recursive_Thread_Mutex>;
@@ -18,11 +16,10 @@ class EntityManager
 public:
 	bool initialize();
 
-	// 创建实体对象
-	// ***TODO*** 这里不需要指定实体类型, 对于从数据库创建的实体, 在load时才知道类型
-	Entity* createEntity(Entity::EntityType eType);
+	// 创建未初始化的实体对象
+	Entity* createEntity();
 
-	// 客户端创建角色
+	// 使用客户端数据包新建角色对象
 	Entity* createEntity(WorldPacket& packet);
 
 private:

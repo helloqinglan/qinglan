@@ -10,34 +10,33 @@
 #include "Entity/UpdateFields.h"
 #include "PropertySetImpl.h"
 #include "Util/Util.h"
-#include <sstream>
 
 PropertySetImpl::PropertySetImpl(Entity* entity)
-: PropertySetComp(entity)
+: PropertySetComp(entity), m_uintValues(0), m_uintValuesMirror(0), m_valuesCount(0)
 {
-	switch (entity->entityType())
-	{
-	case Entity::Type_Player:
-		m_valuesCount = PLAYER_END;
-		break;
-
-	default:
-		// 错误
-		m_valuesCount = OBJECT_END;
-		break;
-	}
-
-	m_uintValues = new u_int[m_valuesCount];
-	memset(m_uintValues, 0, sizeof(u_int)*m_valuesCount);
-
-	m_uintValuesMirror = new u_int[m_valuesCount];
-	memset(m_uintValuesMirror, 0, sizeof(u_int)*m_valuesCount);
 }
 
 PropertySetImpl::~PropertySetImpl()
 {
 	delete m_uintValues;
 	delete m_uintValuesMirror;
+}
+
+void PropertySetImpl::initialize(u_int count)
+{
+	if (m_valuesCount)
+	{
+		delete m_uintValues;
+		delete m_uintValuesMirror;
+	}
+
+	m_valuesCount = count;
+
+	m_uintValues = new u_int[m_valuesCount];
+	memset(m_uintValues, 0, sizeof(u_int)*m_valuesCount);
+
+	m_uintValuesMirror = new u_int[m_valuesCount];
+	memset(m_uintValuesMirror, 0, sizeof(u_int)*m_valuesCount);
 }
 
 void PropertySetImpl::setIntValue(u_short index, int value)
@@ -81,8 +80,14 @@ bool PropertySetImpl::loadValues(const std::string& data)
 	typedef std::vector<std::string> Tokens;
 	Tokens propData = strSplit(data, " ");
 
-	if (propData.size() != m_valuesCount)
+	if (!m_valuesCount)
+		initialize((u_int)propData.size());
+	else if (propData.size() != m_valuesCount)
+	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("PropertySetImpl::loadValues 属性集数据错误, %u - %u.\n"), 
+			propData.size(), m_valuesCount));
 		return false;
+	}
 
 	int index;
 	Tokens::iterator itr;

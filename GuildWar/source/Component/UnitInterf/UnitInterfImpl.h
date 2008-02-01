@@ -23,6 +23,7 @@ public:
 	// *-------------------------------------------------------------
 	u_int map() const { return m_mapID; }
 	u_int zone() const;
+	u_int area() const;
 	float posX() const { return m_positionX; }
 	float posY() const { return m_positionY; }
 	float posZ() const { return m_positionZ; }

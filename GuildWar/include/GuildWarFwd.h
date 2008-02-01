@@ -21,3 +21,16 @@ class SocketService;
 class Field;
 class QueryResult;
 class Database;
+
+// WorldThread相关
+class WorldPacket;
+
+// Entity相关
+class Entity;
+class EntityManager;
+
+// Component相关
+class ComponentBase;
+class PropertySetComp;
+class UnitInterfComp;
+class DataIOComp;

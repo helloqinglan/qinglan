@@ -7,8 +7,8 @@
 
 #pragma once
 
+#include "GuildWarFwd.h"
 #include "NetWork/SocketState.h"
-#include "WorldThread/WorldPacket.h"
 
 class CharacterState : public SocketState
 {

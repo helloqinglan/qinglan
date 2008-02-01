@@ -1,7 +1,7 @@
 
 // *-----------------------------------------------------------------
 //
-// 对象属性集字段定义
+// 实体属性集字段定义
 //
 // *-----------------------------------------------------------------
 
@@ -29,6 +29,15 @@ enum EContainerFields
 
 enum EUnitFields
 {
+	UNIT_FIELD_CHARM					= OBJECT_END + 0x0000,	// ***TODO***, Size: 2, Type: LONG
+	UNIT_FIELD_SUMMON					= OBJECT_END + 0x0002,	// ***TODO***, Size: 2, Type: LONG
+	UNIT_FIELD_CHARMEDBY				= OBJECT_END + 0x0004,	// ***TODO***, Size: 2, Type: LONG
+	UNIT_FIELD_SUMMONEDBY				= OBJECT_END + 0x0006,	// ***TODO***, Size: 2, Type: LONG
+	UNIT_FIELD_CREATEDBY				= OBJECT_END + 0x0008,	// ***TODO***, Size: 2, Type: LONG
+	UNIT_FIELD_TARGET					= OBJECT_END + 0x000A,	// ***TODO***, Size: 2, Type: LONG
+	UNIT_FIELD_PERSUADED				= OBJECT_END + 0x000C,	// ***TODO***, Size: 2, Type: LONG
+	UNIT_FIELD_CHANNEL_OBJECT			= OBJECT_END + 0x000E,	// ***TODO*** 通道类技能相关, Size: 2, Type: LONG
+
 	UNIT_FIELD_LEVEL					= OBJECT_END + 0x001C,	// 角色等级, Size: 1, Type: INT
 
 	UNIT_FIELD_BYTES_0					= OBJECT_END + 0x001E,	// 种族、职业、性别、能量类型, Size: 1, Type: INT
@@ -40,6 +49,7 @@ enum EUnitFields
 	UNIT_FIELD_NATIVEDISPLAYID			= OBJECT_END + 0x0093,	// 原始的显示模型ID, Size: 1, Type: INT
 
 	UNIT_FIELD_BYTES_1					= OBJECT_END + 0x0099,	// ***TODO***, Size: 1, Type: BYTES
+	UNIT_CHANNEL_SPELL					= OBJECT_END + 0x009F,	// ***TODO*** 通道类技能相关, Size: 1, Type: BYTES
 	UNIT_MOD_CAST_SPEED					= OBJECT_END + 0x00A0,	// 施法速度, Size: 1, Type: FLOAT
 	UNIT_FIELD_BYTES_2					= OBJECT_END + 0x00CB,	// ***TODO***, Size: 1, Type: BYTES
 

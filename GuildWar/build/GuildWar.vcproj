@@ -341,7 +341,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\Entity\UpdateData.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\Entity\UpdateFields.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\Entity\UpdateMask.h"
 					>
 				</File>
 			</Filter>
@@ -350,6 +358,10 @@
 				>
 				<File
 					RelativePath="..\include\Component\ComponentBase.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\Component\DataIOComp.h"
 					>
 				</File>
 				<File
@@ -556,6 +568,10 @@
 					RelativePath="..\source\Entity\EntityManager.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\source\Entity\UpdateData.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Component"
@@ -581,6 +597,18 @@
 					</File>
 					<File
 						RelativePath="..\source\Component\UnitInterf\UnitInterfImpl.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="DataIO"
+					>
+					<File
+						RelativePath="..\source\Component\DataIO\DataIOImpl.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\source\Component\DataIO\DataIOImpl.h"
 						>
 					</File>
 				</Filter>

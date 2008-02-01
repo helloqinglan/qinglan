@@ -16,6 +16,7 @@
 //            可考虑做个组件工厂, 工厂的实现在Component目录
 #include "../Component/PropertySet/PropertySetImpl.h"
 #include "../Component/UnitInterf/UnitInterfImpl.h"
+#include "../Component/DataIO/DataIOImpl.h"
 
 
 bool EntityManager::initialize()
@@ -32,20 +33,21 @@ bool EntityManager::initialize()
 	return true;
 }
 
-Entity* EntityManager::createEntity(Entity::EntityType eType)
+Entity* EntityManager::createEntity()
 {
-	Entity* entity = new Entity(eType);
+	Entity* entity = new Entity();
 
 	// ***TODO*** 现在做的简单处理, entity中创建了所有的Component
 	entity->m_componentList.push_back(new PropertySetImpl(entity));
 	entity->m_componentList.push_back(new UnitInterfImpl(entity));
+	entity->m_componentList.push_back(new DataIOImpl(entity));
 
 	return entity;
 }
 
 Entity* EntityManager::createEntity(WorldPacket& packet)
 {
-	Entity* entity = createEntity(Entity::Type_Player);
+	Entity* entity = createEntity();
 	if (!entity)
 		return 0;
 	
@@ -53,6 +55,7 @@ Entity* EntityManager::createEntity(WorldPacket& packet)
 	UnitInterfComp* unitInterf = entity->getComponent<UnitInterfComp>(ComponentBase::UnitInterf);
 
 	// 设置基本属性
+	propSet->initialize(PLAYER_END);
 	propSet->setUintValue(OBJECT_FIELD_GUID, m_hiCharGuid++);
 	propSet->setUintValue(OBJECT_FIELD_GUID + 1, HIGHGUID_PLAYER);
 	propSet->setUintValue(OBJECT_FIELD_TYPE, Entity::Type_Player);

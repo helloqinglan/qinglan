@@ -7,11 +7,15 @@
 
 #include "GuildWarPch.h"
 #include "CharacterState.h"
-#include "Database/Database.h"
-#include "WorldThread/WorldSocket.h"
 
+#include "Component/DataIOComp.h"
+#include "Component/UnitInterfComp.h"
 #include "Entity/EntityDefines.h"
 #include "Entity/EntityManager.h"
+#include "Entity/Entity.h"
+
+#include "WorldThread/WorldSocket.h"
+#include "Database/Database.h"
 
 
 // *-----------------------------------------------------------------
@@ -22,14 +26,23 @@
 #define CMSG_CHAR_ENUM					55		// 角色列表
 #define CMSG_CHAR_DELETE				56		// 删除角色
 #define CMSG_PLAYER_LOGIN				61		// 进入游戏
-#define CMSG_REALM_SPLIT_INFO_REQUEST	908		// ***TODO*** 在角色选择界面出现, 不知道做什么的
+#define CMSG_REALM_SPLIT_INFO_REQUEST	908		// ***TODO*** 在角色选择界面出现
 
 // 该状态下服务器会发送的消息码
 #define SMSG_PONG						477		// Ping返回包
 #define SMSG_CHAR_CREATE				58		// 创建角色
 #define SMSG_CHAR_ENUM					59		// 角色列表
 #define SMSG_CHAR_DELETE				60		// 删除角色
+#define	SMSG_LOGIN_SETTIMESPEED			66		// 服务器时间
+#define SMSG_BINDPOINTUPDATE			341		// 旅馆位置更新
+#define SMSG_ACCOUNT_DATA_MD5			521		// 帐号MD5
+#define SMSG_SET_REST_START				542		// ***TODO*** 进入游戏时发送
+#define SMSG_LOGIN_VERIFY_WORLD			566		// 校验坐标信息
+#define SMSG_INIT_WORLD_STATES			706		// 世界状态信息
+#define SMSG_SET_DUNGEON_DIFFICULTY		809		// 副本难度
+#define SMSG_MOTD						829		// 欢迎信息
 #define SMSG_REALM_SPLIT_INFO_RESPONSE	907		// 对908的应答
+#define SMSG_VOICE_SYSTEM_STATUS		968		// 语音系统状态设置
 
 // 角色创建的结果码
 enum E_CHAR_CREATE_CODE
@@ -108,7 +121,8 @@ bool CharacterState::createCharacter(WorldPacket& packet)
 	}
 	else
 	{
-		entity->save();
+		DataIOComp* dataIO = entity->getComponent<DataIOComp>(ComponentBase::DataIO);
+		dataIO->save();
 		data << (u_char)CHAR_CREATE_SUCCESS;
 	}
 
@@ -133,11 +147,13 @@ bool CharacterState::enumCharacter(WorldPacket& packet)
 			Field* field = result->fetch();
 			u_int id = field[0].getUInt();
 
-			Entity* entity = ENTITYMANAGER->createEntity(Entity::Type_Player);
-			if (!entity->load(id))
+			Entity* entity = ENTITYMANAGER->createEntity();
+			DataIOComp* dataIO = entity->getComponent<DataIOComp>(ComponentBase::DataIO);
+
+			if (!dataIO->miniLoad(id))
 				continue;
 
-			entity->buildEnumPacket(data);
+			dataIO->buildEnumPacket(data);
 
 			delete entity;
 
@@ -173,13 +189,128 @@ bool CharacterState::deleteCharacter(WorldPacket& packet)
 // 进入游戏
 bool CharacterState::playerLogin(WorldPacket& packet)
 {
-/*	Entity* entity = ENTITYMANAGER->createEntity(Entity::Type_Player);
-	if (!entity->load(id))
+	u_int64 guid;
+	packet >> guid;
+
+	Entity* entity = ENTITYMANAGER->createEntity();
+	DataIOComp* dataIO = entity->getComponent<DataIOComp>(ComponentBase::DataIO);
+	UnitInterfComp* unitInterf = entity->getComponent<UnitInterfComp>(ComponentBase::UnitInterf);
+
+	if (!dataIO->load(GUID_LOPART(guid)))
 	{
-		ACE_ERROR ((GAME_ERROR ACE_TEXT("CharacterState::playerLogin 从数据库加载角色数据失败: %d.\n"), packet->getOpcode()));
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("CharacterState::playerLogin 从数据库加载角色数据失败: %u.\n"), GUID_LOPART(guid)));
 		return false;
 	}
-*/
+
+	// 发送副本难度数据
+	{
+		WorldPacket pkt(SMSG_LOGIN_VERIFY_WORLD, 20);
+		pkt << (u_int)0;				// 0为普通, 1为英雄
+		pkt << (u_int)1;
+		pkt << (u_int)0;
+		sendData(pkt);
+	}
+
+	// 发送校验坐标信息数据
+	{
+		WorldPacket pkt(SMSG_SET_DUNGEON_DIFFICULTY, 12);
+		pkt << unitInterf->map();
+		pkt << unitInterf->posX();
+		pkt << unitInterf->posY();
+		pkt << unitInterf->posZ();
+		pkt << unitInterf->orientation();
+		sendData(pkt);
+	}
+
+	// 发送帐号MD5数据
+	{
+		WorldPacket pkt(SMSG_ACCOUNT_DATA_MD5, 128);
+		for (int i = 0; i < 32; ++i)
+			pkt << (u_int)0;
+		sendData(pkt);
+	}
+
+	// ***TODO*** 好友列表
+	// ***TODO*** 屏蔽列表
+
+	// 发送语音系统状态设置数据
+	{
+		WorldPacket pkt(SMSG_VOICE_SYSTEM_STATUS, 2);
+		pkt << (u_char)2;
+		pkt << (u_char)0;		// 1为启用客户端聊天界面
+		sendData(pkt);
+	}
+
+	// 发送欢迎信息
+	// ***TODO*** 这个应该派发事件, 由脚本来发送欢迎信息
+	{
+		WorldPacket pkt(SMSG_MOTD, 50);
+		pkt << (u_int)1;			// 行数
+		pkt << "Hello World.";
+		sendData(pkt);
+	}
+
+	// ***TODO*** 公会信息
+
+	// Unkown
+	{
+		WorldPacket pkt(SMSG_SET_REST_START, 4);
+		pkt << (u_int)0;
+		sendData(pkt);
+	}
+
+	// 发送旅馆位置更新信息
+	// ***TODO*** 做类似于飞行棋的效果, 可随意设置位置
+	{
+		WorldPacket pkt(SMSG_BINDPOINTUPDATE, 20);
+		pkt << unitInterf->posX();
+		pkt << unitInterf->posY();
+		pkt << unitInterf->posZ();
+		pkt << unitInterf->map();
+		pkt << unitInterf->zone();
+		sendData(pkt);
+	}
+
+	// ***TODO*** SMSG_TUTORIAL_FLAGS 是不是可以不发
+	// ***TODO*** SMSG_INITIAL_SPELLS 技能列表
+	// ***TODO*** SMSG_ACTION_BUTTONS 快捷栏列表
+	// ***TODO*** SMSG_INITIALIZE_FACTIONS 声望数据
+
+	// ***TODO*** SMSG_INIT_WORLD_STATES 世界状态, 不同zone/map发送的数据不一样
+	// 每进入一个新的map时都会发送这个数据, 所以需要独立出来, 最好用脚本, 注册进入map的事件
+	{
+		WorldPacket pkt(SMSG_INIT_WORLD_STATES, 14);
+		pkt << unitInterf->map();
+		pkt << unitInterf->zone();
+		pkt << unitInterf->area();
+		pkt << (u_int)0;						// count of uint64 blocks
+		pkt << (u_int)0x8d8 << (u_int)(0x0);	// 1
+		pkt << (u_int)0x8d7 << (u_int)(0x0);	// 2
+		pkt << (u_int)0x8d6 << (u_int)(0x0);	// 3
+		pkt << (u_int)0x8d5 << (u_int)(0x0);	// 4
+		pkt << (u_int)0x8d4 << (u_int)(0x0);	// 5
+		pkt << (u_int)0x8d3 << (u_int)(0x0);	// 6
+		sendData(pkt);
+	}
+
+	// 发送服务器时间
+	// ***TODO*** 服务器时间需要一个独立的组件
+	{
+		time_t gameTime = time(0);
+		struct tm lt;
+		localtime_s(&lt, &gameTime);
+		u_int xmitTime = (lt.tm_year - 100) << 24 | lt.tm_mon  << 20 |
+			(lt.tm_mday - 1) << 14 | lt.tm_wday << 11 |
+			lt.tm_hour << 6 | lt.tm_min;
+
+		WorldPacket pkt(SMSG_LOGIN_SETTIMESPEED, 8);
+		pkt << xmitTime;					// 服务器时间
+		pkt << (float)0.01666667f;			// 游戏速度
+		sendData(pkt);
+	}
+
+	// ***TODO*** SMSG_TRIGGER_CINEMATIC 触发动画, 用脚本看看都有哪些动画
+
 	return true;
 }
 

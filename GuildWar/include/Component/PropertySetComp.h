@@ -17,6 +17,9 @@ public:
 	{
 	}
 
+	// 初始化属性集大小
+	virtual void initialize(u_int count) = 0;
+
 
 	// 获取属性数据
 	virtual const int& getIntValue(u_short index) const = 0;

@@ -15,15 +15,18 @@ public:
 	PropertySetImpl(Entity* entity);
 	~PropertySetImpl();
 
+	// 初始化属性集大小
+	void initialize(u_int count);
+
 
 	// 获取属性数据
-	const int& getIntValue(u_short index) const { return m_intValues[index]; }
+	const int& getIntValue(u_short index) const { assert(index < m_valuesCount); return m_intValues[index]; }
 
-	const u_int& getUintValue(u_short index) const { return m_uintValues[index]; }
+	const u_int& getUintValue(u_short index) const { assert(index < m_valuesCount); return m_uintValues[index]; }
 
-	const u_int64& getUint64Value(u_short index) const { return *((u_int64*)&(m_uintValues[index])); }
+	const u_int64& getUint64Value(u_short index) const { assert(index < m_valuesCount); return *((u_int64*)&(m_uintValues[index])); }
 
-	const float& getFloatValue(u_short index) const { return m_floatValues[index]; }
+	const float& getFloatValue(u_short index) const { assert(index < m_valuesCount); return m_floatValues[index]; }
 
 
 	// 设置属性数据

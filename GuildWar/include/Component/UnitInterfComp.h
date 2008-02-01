@@ -37,6 +37,8 @@ public:
 
 	virtual u_int zone() const = 0;
 
+	virtual u_int area() const = 0;
+
 	virtual float posX() const = 0;
 
 	virtual float posY() const = 0;

@@ -12,7 +12,7 @@
 #include "Component/PropertySetComp.h"
 
 UnitInterfImpl::UnitInterfImpl(Entity* entity)
-: UnitInterfComp(entity)
+: UnitInterfComp(entity), m_mapID(0), m_positionX(0), m_positionY(0), m_positionZ(0), m_orientation(0)
 {
 }
 
@@ -44,4 +44,10 @@ u_int UnitInterfImpl::zone() const
 {
 	// ***TODO*** 如何取zoneID
 	return 3459;
+}
+
+u_int UnitInterfImpl::area() const
+{
+	// ***TODO*** 如何取areaID
+	return 0;
 }
