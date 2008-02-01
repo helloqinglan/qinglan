@@ -18,6 +18,9 @@ public:
 	// 初始化属性集大小
 	void initialize(u_int count);
 
+	// 属性集大小
+	u_short valueCount() const { return m_valuesCount; }
+
 
 	// 获取属性数据
 	const int& getIntValue(u_short index) const { assert(index < m_valuesCount); return m_intValues[index]; }

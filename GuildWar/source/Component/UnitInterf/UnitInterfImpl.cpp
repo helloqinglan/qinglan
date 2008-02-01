@@ -49,5 +49,5 @@ u_int UnitInterfImpl::zone() const
 u_int UnitInterfImpl::area() const
 {
 	// ***TODO*** »Á∫Œ»°areaID
-	return 0;
+	return 3459;
 }

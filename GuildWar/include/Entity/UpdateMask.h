@@ -125,11 +125,11 @@ public:
 
 	bool getBit(u_int index)
 	{
-		return (((u_char*)m_maskData)[index >> 3] & (1 << (index & 0x7)) != 0);
+		return (((((u_char*)m_maskData)[index >> 3]) & (1 << (index & 0x7))) != 0);
 	}
 
 private:
 	u_int m_count;			// 数据项个数
 	u_int m_blocks;			// u_int个数
 	u_int* m_maskData;
-}
+};

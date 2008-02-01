@@ -10,12 +10,17 @@
 
 #include "Component/DataIOComp.h"
 #include "Component/UnitInterfComp.h"
+#include "Component/PropertySetComp.h"
 #include "Entity/EntityDefines.h"
 #include "Entity/EntityManager.h"
 #include "Entity/Entity.h"
 
 #include "WorldThread/WorldSocket.h"
 #include "Database/Database.h"
+
+// ***TODO*** 这些不应该放在这里
+#include "Entity/UpdateData.h"
+#include "Entity/UpdateMask.h"
 
 
 // *-----------------------------------------------------------------
@@ -34,11 +39,17 @@
 #define SMSG_CHAR_ENUM					59		// 角色列表
 #define SMSG_CHAR_DELETE				60		// 删除角色
 #define	SMSG_LOGIN_SETTIMESPEED			66		// 服务器时间
+#define SMSG_TUTORIAL_FLAGS				253		// 教程列表
+#define SMSG_INITIALIZE_FACTIONS		290		// 阵营信息
+#define SMSG_ACTION_BUTTONS				297		// 快捷栏列表
+#define SMSG_INITIAL_SPELLS				298		// 技能列表
 #define SMSG_BINDPOINTUPDATE			341		// 旅馆位置更新
+#define SMSG_QUERY_TIME_RESPONSE		463		// ***TODO***
 #define SMSG_ACCOUNT_DATA_MD5			521		// 帐号MD5
 #define SMSG_SET_REST_START				542		// ***TODO*** 进入游戏时发送
 #define SMSG_LOGIN_VERIFY_WORLD			566		// 校验坐标信息
 #define SMSG_INIT_WORLD_STATES			706		// 世界状态信息
+#define SMSG_WEATHER					756		// 天气信息
 #define SMSG_SET_DUNGEON_DIFFICULTY		809		// 副本难度
 #define SMSG_MOTD						829		// 欢迎信息
 #define SMSG_REALM_SPLIT_INFO_RESPONSE	907		// 对908的应答
@@ -195,6 +206,7 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 	Entity* entity = ENTITYMANAGER->createEntity();
 	DataIOComp* dataIO = entity->getComponent<DataIOComp>(ComponentBase::DataIO);
 	UnitInterfComp* unitInterf = entity->getComponent<UnitInterfComp>(ComponentBase::UnitInterf);
+	PropertySetComp* propSet = entity->getComponent<PropertySetComp>(ComponentBase::PropertySet);
 
 	if (!dataIO->load(GUID_LOPART(guid)))
 	{
@@ -204,7 +216,7 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 
 	// 发送副本难度数据
 	{
-		WorldPacket pkt(SMSG_LOGIN_VERIFY_WORLD, 20);
+		WorldPacket pkt(SMSG_SET_DUNGEON_DIFFICULTY, 12);
 		pkt << (u_int)0;				// 0为普通, 1为英雄
 		pkt << (u_int)1;
 		pkt << (u_int)0;
@@ -213,7 +225,7 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 
 	// 发送校验坐标信息数据
 	{
-		WorldPacket pkt(SMSG_SET_DUNGEON_DIFFICULTY, 12);
+		WorldPacket pkt(SMSG_LOGIN_VERIFY_WORLD, 20);
 		pkt << unitInterf->map();
 		pkt << unitInterf->posX();
 		pkt << unitInterf->posY();
@@ -271,25 +283,73 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 		sendData(pkt);
 	}
 
-	// ***TODO*** SMSG_TUTORIAL_FLAGS 是不是可以不发
+	// ***TODO*** SMSG_TUTORIAL_FLAGS 教程列表
+	{
+		WorldPacket pkt(SMSG_TUTORIAL_FLAGS, 32);
+		for (int i = 0; i < 8; ++i)
+			pkt << (u_int)0;
+		sendData(pkt);
+	}
+
 	// ***TODO*** SMSG_INITIAL_SPELLS 技能列表
+	{
+		WorldPacket pkt(SMSG_INITIAL_SPELLS, 5);
+		pkt << (u_char)0;
+		pkt << (u_short)0;
+		pkt << (u_short)0;
+		sendData(pkt);
+	}
+
 	// ***TODO*** SMSG_ACTION_BUTTONS 快捷栏列表
+	{
+		#define MAX_ACTION_BUTTONS 132
+		WorldPacket pkt(SMSG_ACTION_BUTTONS, MAX_ACTION_BUTTONS * 4);
+		for (int i = 0; i < MAX_ACTION_BUTTONS; ++i)
+			pkt << (u_int)0;
+		sendData(pkt);
+	}
+
 	// ***TODO*** SMSG_INITIALIZE_FACTIONS 声望数据
+	{
+		WorldPacket pkt(SMSG_INITIALIZE_FACTIONS, 4 + 128 * 5);
+		pkt << (u_int)0x00000080;
+		for (int i = 0; i < 128; ++i)
+		{
+			pkt << (u_char)0;
+			pkt << (u_int)0;
+		}
+		sendData(pkt);
+	}
+
+	// ***TODO*** 天气信息
+	{
+		WorldPacket pkt(SMSG_WEATHER, 9);
+		pkt << (u_int)0;
+		pkt << (float)0.0f;
+		pkt << (u_char)0;
+		sendData(pkt);
+	}
 
 	// ***TODO*** SMSG_INIT_WORLD_STATES 世界状态, 不同zone/map发送的数据不一样
 	// 每进入一个新的map时都会发送这个数据, 所以需要独立出来, 最好用脚本, 注册进入map的事件
 	{
+		u_short numOfFields = 10;
+
 		WorldPacket pkt(SMSG_INIT_WORLD_STATES, 14);
 		pkt << unitInterf->map();
 		pkt << unitInterf->zone();
 		pkt << unitInterf->area();
-		pkt << (u_int)0;						// count of uint64 blocks
+		pkt << numOfFields;						// count of uint64 blocks
 		pkt << (u_int)0x8d8 << (u_int)(0x0);	// 1
 		pkt << (u_int)0x8d7 << (u_int)(0x0);	// 2
 		pkt << (u_int)0x8d6 << (u_int)(0x0);	// 3
 		pkt << (u_int)0x8d5 << (u_int)(0x0);	// 4
 		pkt << (u_int)0x8d4 << (u_int)(0x0);	// 5
 		pkt << (u_int)0x8d3 << (u_int)(0x0);	// 6
+		pkt << (u_int)0x914 << (u_int)(0x0);	// 7
+		pkt << (u_int)0x913 << (u_int)(0x0);	// 8
+		pkt << (u_int)0x912 << (u_int)(0x0);	// 9
+		pkt << (u_int)0x915 << (u_int)(0x0);	// 10
 		sendData(pkt);
 	}
 
@@ -309,7 +369,79 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 		sendData(pkt);
 	}
 
+	return true;
+
 	// ***TODO*** SMSG_TRIGGER_CINEMATIC 触发动画, 用脚本看看都有哪些动画
+
+	// 发送属性改变数据到客户端
+	// ***TODO*** 这段代码不应该放在这里
+	{
+		UpdateData data;
+
+		u_char updateType = UpdateData::UPDATETYPE_CREATE_OBJECT2;
+		u_char flags = UpdateData::UPDATEFLAG_HIGHGUID | UpdateData::UPDATEFLAG_LIVING | 
+			UpdateData::UPDATEFLAG_HASPOSITION | UpdateData::UPDATEFLAG_SELF;
+		u_int flags2 = 0;
+
+		ByteBuffer buf(500);
+		buf << updateType;
+		buf << 0xFF << guid;
+		buf << (u_char)4;			// ***TODO*** OBJECT_TYPEID, 玩家为4, 要在entity中提供查询接口
+
+		buf << flags;
+		buf << (u_int)0;			// 移动掩码
+		buf << (u_char)0;
+		buf << (u_int)GetTickCount();
+
+		buf << unitInterf->posX();
+		buf << unitInterf->posY();
+		buf << unitInterf->posZ();
+		buf << unitInterf->orientation();
+
+		buf << (u_int)0;			// fall time
+
+		buf << (float)1.0f;			// 8种移动速度
+		buf << (float)1.0f;
+		buf << (float)1.0f;
+		buf << (float)1.0f;
+		buf << (float)1.0f;
+		buf << (float)1.0f;
+		buf << (float)1.0f;
+		buf << (float)1.0f;
+
+		buf << (u_int)0;
+
+		UpdateMask mask;
+		mask.count(propSet->valueCount());
+		for (u_short i = 0; i < propSet->valueCount(); ++i)
+		{
+			if (propSet->getUintValue(i))
+				mask.setBit(i);
+		}
+
+		buf << (u_char)mask.blocks();
+		buf.append(mask.maskData(), mask.length());
+
+		for (u_short i = 0; i < propSet->valueCount(); ++i)
+			buf << propSet->getUintValue(i);
+
+		data.addUpdateBlock(buf);
+
+		WorldPacket pkt;
+		data.buildPacket(pkt);
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_QUERY_TIME_RESPONSE, 8);
+		pkt << (u_int)time(0);
+		pkt << (u_int)0;
+		sendData(pkt);
+	}
+
+	// ***TODO*** 这里还有个压缩的更新包 502
+	// ***TODO*** 这里还有个更新包 169
 
 	return true;
 }
