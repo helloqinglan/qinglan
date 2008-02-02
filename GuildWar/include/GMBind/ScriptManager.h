@@ -16,6 +16,9 @@ class ScriptManager
 public:
 	bool initialize();
 
+	// Ö´ÐÐ½Å±¾
+	bool executeString(const std::string& script);
+
 	gmMachine* machine() const { return m_scriptMachine; }
 
 protected:
