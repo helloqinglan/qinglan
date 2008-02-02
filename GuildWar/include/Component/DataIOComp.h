@@ -23,7 +23,6 @@ public:
 	virtual bool save() = 0;
 
 	// 最小化加载, 为角色列表准备数据
-	// ***TODO*** 看看有没有必要分miniLoad()和load()两个方法
 	virtual bool miniLoad(u_int id) = 0;
 
 	// 从数据库加载

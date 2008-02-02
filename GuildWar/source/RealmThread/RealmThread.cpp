@@ -12,7 +12,7 @@
 #include "Network/SocketService.h"
 #include "LogonAuthState.h"
 
-// ***TODO*** 把这个宏放到一个公共的头文件中
+// 登录服监听端口
 #define REALMS_LISTEN_PORT 3724
 
 RealmThread::RealmThread() : ACE_Task_Base(), m_running(false)

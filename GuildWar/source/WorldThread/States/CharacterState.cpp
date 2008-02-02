@@ -75,34 +75,25 @@ enum E_CHAR_DELETE_CODE
 CharacterState::CharacterState(SocketService* sm)
 : SocketState(sm)
 {
+	m_packetProcess[CMSG_PING] = &CharacterState::pingRequest;
+	m_packetProcess[CMSG_CHAR_CREATE] = &CharacterState::createCharacter;
+	m_packetProcess[CMSG_CHAR_ENUM] = &CharacterState::enumCharacter;
+	m_packetProcess[CMSG_CHAR_DELETE] = &CharacterState::deleteCharacter;
+	m_packetProcess[CMSG_PLAYER_LOGIN] = &CharacterState::playerLogin;
+	m_packetProcess[CMSG_REALM_SPLIT_INFO_REQUEST] = &CharacterState::realmSplitInfo;
 }
 
 bool CharacterState::process(void* arg)
 {
-	// ***TODO*** 丑陋的强制类型转换, 改成使用boost::any
 	WorldPacket* packet = (WorldPacket*)arg;
 
-	// ***TODO*** 在SocketState基类中提供对消息注册事件处理的方法
-	//            去掉这些冗长的if...else
-	if (packet->getOpcode() == CMSG_PING)
-		return pingRequest(*packet);
-	else if (packet->getOpcode() == CMSG_CHAR_CREATE)
-		return createCharacter(*packet);
-	else if (packet->getOpcode() == CMSG_CHAR_ENUM)
-		return enumCharacter(*packet);
-	else if (packet->getOpcode() == CMSG_CHAR_DELETE)
-		return deleteCharacter(*packet);
-	else if (packet->getOpcode() == CMSG_PLAYER_LOGIN)
-		return playerLogin(*packet);
-	else if (packet->getOpcode() == CMSG_REALM_SPLIT_INFO_REQUEST)
-		return realmSplitInfo(*packet);
+	PacketProcessList::iterator itr = m_packetProcess.find(packet->getOpcode());
+	if (itr != m_packetProcess.end())
+		return (this->*(itr->second))(*packet);
 	else
-	{
 		ACE_ERROR ((GAME_ERROR ACE_TEXT("CharacterState::process 未知的消息码: %d.\n"), packet->getOpcode()));
-		return false;
-	}
 
-	return true;
+	return false;
 }
 
 // 每种状态下都需要处理该消息

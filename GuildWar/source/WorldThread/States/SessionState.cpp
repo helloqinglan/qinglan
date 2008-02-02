@@ -15,7 +15,7 @@
 
 // *-----------------------------------------------------------------
 //
-// ***TODO*** 这些宏是否应该放到一个独立的定义文件中?
+
 // 数据包加密种子
 #define PACKET_CRYPT_SEED 0xDEADBABE
 
@@ -46,11 +46,9 @@ SessionState::SessionState(SocketService* sm) : SocketState(sm)
 
 bool SessionState::process(void* arg)
 {
-	// ***TODO*** 丑陋的强制类型转换, 改成使用boost::any
 	WorldPacket* packet = (WorldPacket*)arg;
 
-	// ***TODO*** 在SocketState基类中提供对消息注册事件处理的方法
-	//            去掉这些冗长的if...else
+	// ***TODO*** 对CMSG_PING消息的处理在每个State中都写了一遍
 	if (packet->getOpcode() == CMSG_PING)
 		return pingRequest(*packet);
 	else if (packet->getOpcode() == CMSG_AUTH_SESSION)

@@ -67,6 +67,8 @@
 				OutputFile="$(OutDir)/GuildWar.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="../lib/debug"
+				IgnoreAllDefaultLibraries="false"
+				IgnoreDefaultLibraryNames="LIBCMTD"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/GuildWar.pdb"
 				SubSystem="1"
@@ -147,6 +149,7 @@
 				OutputFile="$(OutDir)/GuildWar.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../lib/release"
+				IgnoreAllDefaultLibraries="false"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -313,6 +316,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\GMBind\gmPacketLib.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\GMBind\gmStringLib.h"
 					>
 				</File>
@@ -322,6 +329,10 @@
 				</File>
 				<File
 					RelativePath="..\include\GMBind\gmVector3Lib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\ScriptManager.h"
 					>
 				</File>
 			</Filter>
@@ -373,6 +384,138 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="G3D"
+				>
+				<File
+					RelativePath="..\include\G3D\AABox.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Array.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Box.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\CollisionDetection.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\CoordinateFrame.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Crypto.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\debug.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\format.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\g3dmath.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\g3dmath.inl"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\GCamera.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Line.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Matrix3.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Plane.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\platform.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Quat.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Quat.inl"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Ray.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\RegistryUtil.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Sphere.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\stringutils.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\System.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Table.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Triangle.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Vector2.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Vector2.inl"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Vector2int16.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Vector3.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Vector3.inl"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Vector3int16.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Vector4.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\G3D\Vector4.inl"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="source"
@@ -389,6 +532,14 @@
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="1"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -545,6 +696,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\source\GMBind\gmPacketLib.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\source\GMBind\gmStringLib.cpp"
 					>
 				</File>
@@ -554,6 +709,10 @@
 				</File>
 				<File
 					RelativePath="..\source\GMBind\gmVector3Lib.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\ScriptManager.cpp"
 					>
 				</File>
 			</Filter>
@@ -612,6 +771,50 @@
 						>
 					</File>
 				</Filter>
+			</Filter>
+			<Filter
+				Name="G3D"
+				>
+				<File
+					RelativePath="..\source\G3D\AABox.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\Box.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\Crypto.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\format.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\Matrix3.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\Plane.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\System.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\Triangle.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\Vector3.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\G3D\Vector4.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 	</Files>

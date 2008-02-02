@@ -12,7 +12,7 @@
 
 // *-----------------------------------------------------------------
 //
-// ***TODO*** 这两个宏是否应该放到一个独立的定义文件中?
+
 // 数据包加密种子
 #define PACKET_CRYPT_SEED 0xDEADBABE
 
@@ -74,7 +74,6 @@ void WorldSocket::closed()
 // 数据收发
 bool WorldSocket::recvData(char* data, size_t len)
 {
-	// ***TODO*** 这里有一次数据拷贝, 是否能避免?
 	m_tmpBuffer.append(data, len);
 
 	while (m_tmpBuffer.length())
@@ -99,7 +98,6 @@ bool WorldSocket::recvData(char* data, size_t len)
 			// 读取余下的数据 不需要解密
 			u_short minLen = std::min(m_recvRemain, (u_short)m_tmpBuffer.length());
 
-			// ***TODO*** 这里又有一次数据拷贝 是否可避免?
 			u_char* tmpData = new u_char[minLen];
 			m_tmpBuffer.read(tmpData, minLen);
 			dataBuffer()->write((char*)tmpData, minLen);

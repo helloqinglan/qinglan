@@ -9,7 +9,6 @@
 
 #pragma once
 
-// ***TODO*** 把这个宏放到一个公共的头文件中
 // 数据接收缓冲区大小 (10K)
 #define RECEIVE_BUFFER_LEN 10240
 
@@ -43,7 +42,6 @@ public:
 	// 发送数据
 	virtual bool sendData(const char* data, size_t len);
 
-	// ***TODO*** 该方法返回了类内部的私有变量, 不符合封装的原则
 	CircularBuffer* dataBuffer() const
 	{
 		assert(m_dataBuffer && "SocketService::dataBuffer m_dataBuffer is null.");

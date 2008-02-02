@@ -46,3 +46,6 @@
 // Sha
 #include "Util/Sha1.h"
 #include "Util/BigNumber.h"
+
+// GMMonkey½Å±¾
+#include "gm/gmThread.h"

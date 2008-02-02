@@ -44,7 +44,6 @@ public:
 	virtual void setFloatValue(u_short index, float value) = 0;
 
 
-	// ***TODO*** 数据库存储的数据改为二进制格式
 	// 获取用于存库的属性集数据
 	virtual std::string getPropertyString() const = 0;
 

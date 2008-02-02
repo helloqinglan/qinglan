@@ -8,6 +8,7 @@
 #include "GuildWarPch.h"
 #include "Util/GameOption.h"
 #include "Database/Database.h"
+#include "GMBind/ScriptManager.h"
 #include "RealmThread/RealmThread.h"
 #include "WorldThread/WorldThread.h"
 
@@ -26,6 +27,9 @@ int ACE_TMAIN(int, ACE_TCHAR *[])
 		return -1;
 
 	if (!DATABASE->initialize(GAME_OPTION->getDatabase().c_str()))
+		return -1;
+
+	if (!SCRIPTMANAGER->initialize())
 		return -1;
 
 	// 开启登录服务线程

@@ -40,4 +40,8 @@ private:
 	bool sendData(WorldPacket& packet);
 
 private:
+	// 使用对消息注册事件处理的方法避免冗长的if...else
+	typedef bool (CharacterState::*PacketProcessFunc)(WorldPacket& packet);
+	typedef std::map<u_short, PacketProcessFunc> PacketProcessList;
+	PacketProcessList m_packetProcess;
 };

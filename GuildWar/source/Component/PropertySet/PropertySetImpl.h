@@ -42,7 +42,6 @@ public:
 	void setFloatValue(u_short index, float value);
 
 
-	// ***TODO*** 数据库存储的数据改为二进制格式
 	// 获取用于存库的属性集数据
 	std::string getPropertyString() const;
 
