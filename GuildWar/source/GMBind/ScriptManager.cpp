@@ -59,8 +59,8 @@ bool ScriptManager::initialize()
 
 	// 测试string的长度问题
 	WorldPacket pkt(10, 100);
-	pkt << "hello");
-	int xxx = pkt.length();
+	pkt << "hello";
+	int xxx = (int)pkt.length();
 
 	ACE_DEBUG ((GAME_DEBUG ACE_TEXT("ScriptManager::Initialize 脚本管理器初始化成功.\n")));
 	return true;

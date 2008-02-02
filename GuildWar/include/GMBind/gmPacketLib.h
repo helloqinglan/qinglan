@@ -18,13 +18,9 @@ class WorldPacket;
 
 // WorldPacket Library
 void gmBindPacketLib(gmMachine * a_machine);
-/*
-// 将一个Packet对象压到栈上
-void gmPacket_Push(gmThread* a_thread, const WorldPacket& pkt);
 
 // 创建一个Packet对象并且填充数据
-gmUserObject* gmPacket_Create(gmMachine* a_machine, const WorldPacket& pkt);
-*/
+gmUserObject* createGMWorldPacket(gmMachine* a_machine, const WorldPacket& pkt);
 
 // gmPacket类型ID
 extern gmType GM_PACKET;

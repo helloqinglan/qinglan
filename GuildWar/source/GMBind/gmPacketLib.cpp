@@ -15,13 +15,30 @@
 gmType GM_PACKET = GM_NULL;
 
 // 对WorldPacket的封装, 以在脚本中处理网络数据包
-class gmPacketObj
+class gmWorldPacket
 {
 public:
+	gmWorldPacket()
+		: m_userObject(0)
+	{
+		m_packet = new WorldPacket();
+	}
+
+	gmWorldPacket(const WorldPacket& pkt)
+		: m_userObject(0)
+	{
+		m_packet = new WorldPacket(pkt);
+	}
+
+	~gmWorldPacket()
+	{
+		delete m_packet;
+	}
+
 	static int GM_CDECL getOpcode(gmThread* a_thread)
 	{
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		a_thread->PushInt(pkt->getOpcode());
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		a_thread->PushInt(pkt->m_packet->getOpcode());
 		return GM_OK;
 	}
 
@@ -30,46 +47,46 @@ public:
 		GM_CHECK_NUM_PARAMS(1);
 		GM_CHECK_INT_PARAM(opcode, 0);
 
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		pkt->setOpcode((u_short)opcode);
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		pkt->m_packet->setOpcode((u_short)opcode);
 		return GM_OK;
 	}
 
 	// 获取数据
 	static int GM_CDECL getInt(gmThread* a_thread)
 	{
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		a_thread->PushInt(pkt->read<u_int>());
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		a_thread->PushInt(pkt->m_packet->read<u_int>());
 		return GM_OK;
 	}
 
 	static int GM_CDECL getShort(gmThread* a_thread)
 	{
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		a_thread->PushInt(pkt->read<u_short>());
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		a_thread->PushInt(pkt->m_packet->read<u_short>());
 		return GM_OK;
 	}
 
 	static int GM_CDECL getFloat(gmThread* a_thread)
 	{
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		a_thread->PushFloat(pkt->read<float>());
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		a_thread->PushFloat(pkt->m_packet->read<float>());
 		return GM_OK;
 	}
 
 	static int GM_CDECL getChar(gmThread* a_thread)
 	{
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		a_thread->PushFloat(pkt->read<u_char>());
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		a_thread->PushFloat(pkt->m_packet->read<u_char>());
 		return GM_OK;
 	}
 
 	static int GM_CDECL getString(gmThread* a_thread)
 	{
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
 
 		std::string data;
-		*pkt >> data;
+		*(pkt->m_packet) >> data;
 		gmStringObject* strObj = SCRIPTMANAGER->machine()->AllocStringObject(data.c_str());
 
 		a_thread->PushString(strObj);
@@ -82,8 +99,8 @@ public:
 		GM_CHECK_NUM_PARAMS(1);
 		GM_CHECK_INT_PARAM(data, 0);
 
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		pkt->append<int>(data);
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		pkt->m_packet->append<int>(data);
 		return GM_OK;
 	}
 
@@ -92,8 +109,8 @@ public:
 		GM_CHECK_NUM_PARAMS(1);
 		GM_CHECK_INT_PARAM(data, 0);
 
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		pkt->append<short>((short)data);
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		pkt->m_packet->append<short>((short)data);
 		return GM_OK;
 	}
 
@@ -102,8 +119,8 @@ public:
 		GM_CHECK_NUM_PARAMS(1);
 		GM_CHECK_FLOAT_PARAM(data, 0);
 
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		pkt->append<float>(data);
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		pkt->m_packet->append<float>(data);
 		return GM_OK;
 	}
 
@@ -112,8 +129,8 @@ public:
 		GM_CHECK_NUM_PARAMS(1);
 		GM_CHECK_INT_PARAM(data, 0);
 
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		pkt->append<char>((char)data);
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		pkt->m_packet->append<char>((char)data);
 		return GM_OK;
 	}
 
@@ -122,27 +139,25 @@ public:
 		GM_CHECK_NUM_PARAMS(1);
 		GM_CHECK_STRING_PARAM(data, 0);
 
-		WorldPacket* pkt = (WorldPacket*)a_thread->ThisUser_NoChecks();
-		pkt->append(data);
+		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
+		pkt->m_packet->append(data);
 		return GM_OK;
 	}
-/*
-	static int GM_CDECL setOpcode(gmThread* a_thread)
-	{
-		return GM_OK;
-	}
-*/
+
 	// *-------------------------------------------------------------
 	// 脚本中WorldPacket类型的构造函数
 	static int GM_CDECL Packet(gmThread* a_thread)
 	{
+		gmWorldPacket* pkt = new gmWorldPacket();
+		pkt->m_userObject = SCRIPTMANAGER->machine()->AllocUserObject(pkt, GM_PACKET);
+
 		int numParams = a_thread->GetNumParams();
-		WorldPacket* newPkt = Alloc(a_thread->GetMachine(),true);
-
 		if (numParams > 0)
-			newPkt->setOpcode((u_short)gmGetFloatOrIntParamAsInt(a_thread, 0));
+			pkt->m_packet->setOpcode((u_short)gmGetFloatOrIntParamAsInt(a_thread, 0));
+		if (numParams > 1)
+			pkt->m_packet->reserve(gmGetFloatOrIntParamAsInt(a_thread, 1));
 
-		a_thread->PushNewUser(newPkt, GM_PACKET);
+		a_thread->PushNewUser(pkt, GM_PACKET);
 		return GM_OK;
 	}
 
@@ -155,66 +170,46 @@ public:
 #endif
 	{
 		GM_ASSERT(a_object->m_userType == GM_PACKET);
-		WorldPacket* object = (WorldPacket*)a_object->m_user;
-		Free(a_machine, object);
+		gmWorldPacket* object = (gmWorldPacket*)a_object->m_user;
+		// ***TODO*** GC回收是怎么处理的?
+		//delete object;
 	}
 
 	static void GM_CDECL AsString(gmUserObject* a_object, char* a_buffer, int a_bufferLen)
 	{
 		WorldPacket* pkt = (WorldPacket*)a_object->m_user;
-		_gmsnprintf(a_buffer, a_bufferLen, "(%d)", pkt->getOpcode());
+		_gmsnprintf(a_buffer, a_bufferLen, "WorldPacket (%d)", pkt->getOpcode());
 	}
 
-	// Allocate memory for one object
-	static WorldPacket* Alloc(gmMachine* a_machine, bool a_clearToZero)
-	{
-		a_machine->AdjustKnownMemoryUsed(sizeof(WorldPacket));
-		WorldPacket* newObj = (WorldPacket*)s_mem.Alloc();
-		return newObj;
-	}
-
-	// Free memory for one object
-	static void Free(gmMachine* a_machine, WorldPacket* a_obj)
-	{
-		a_machine->AdjustKnownMemoryUsed(-(int)sizeof(WorldPacket));
-		s_mem.Free(a_obj);
-	}
-
+public:
+	WorldPacket* m_packet;			// 引用到实际的数据
+	gmUserObject* m_userObject;		// 引用到脚本中创建的对象
 };
 
-/*
+
 // *-----------------------------------------------------------------
-// 将一个WorldPacket对象压到栈上
-void gmPacket_Push(gmThread* a_thread, const WorldPacket& pkt)
+// 创建一个WorldPacket对象并且填充数据
+gmUserObject* createGMWorldPacket(gmMachine* a_machine, const WorldPacket& pkt)
 {
-	WorldPacket* newPkt = gmPacketObj::Alloc(a_thread->GetMachine(), false);
-	// ***TODO*** 怎么赋值?
-	//*newPkt = *(WorldPacket*)a_vec;
-	a_thread->PushNewUser(newPkt, GM_PACKET);
+	gmWorldPacket* gmpkt = new gmWorldPacket(pkt);
+	gmpkt->m_userObject = a_machine->AllocUserObject(gmpkt, GM_PACKET);
+
+	return gmpkt->m_userObject;
 }
 
-// 创建一个WorldPacket对象并且填充数据
-gmUserObject* gmPacket_Create(gmMachine* a_machine, const WorldPacket& pkt)
-{
-	WorldPacket* newPkt = gmPacketObj::Alloc(a_machine, false);
-	// ***TODO*** 怎么赋值?
-	//*newPkt = *(WorldPacket*)a_vec;
-	return a_machine->AllocUserObject(newPkt, GM_PACKET);
-}
-*/
 
 // *-----------------------------------------------------------------
 // Libs
 
 static gmFunctionEntry s_packetLib[] =
 {
-	{"WorldPacket", gmPacketObj::Packet},
+	{"WorldPacket", gmWorldPacket::Packet},
 };
 
 static gmFunctionEntry s_packetTypeLib[] =
 {
-	{"getOpcode", gmPacketObj::getOpcode},
-	{"setOpcode", gmPacketObj::setOpcode},
+	{"getOpcode", gmWorldPacket::getOpcode},
+	{"setOpcode", gmWorldPacket::setOpcode},
 };
 
 
@@ -234,8 +229,8 @@ void gmBindPacketLib(gmMachine * a_machine)
 
 	// Register garbage collection for type
 #if GM_USE_INCGC
-	a_machine->RegisterUserCallbacks(GM_PACKET, NULL, gmPacketObj::GCDestruct, gmPacketObj::AsString); 
+	a_machine->RegisterUserCallbacks(GM_PACKET, NULL, gmWorldPacket::GCDestruct, gmWorldPacket::AsString); 
 #else
-	a_machine->RegisterUserCallbacks(GM_PACKET, NULL, gmPacketObj::Collect, gmPacketObj::AsString);
+	a_machine->RegisterUserCallbacks(GM_PACKET, NULL, gmWorldPacket::Collect, gmWorldPacket::AsString);
 #endif
 }
