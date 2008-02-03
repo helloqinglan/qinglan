@@ -64,6 +64,30 @@ bool GameOption::loadOptions()
 	}
 	m_database = database.c_str();
 
+	// Scriptœ‡πÿ
+	ACE_Configuration_Section_Key scriptSection;
+	if (m_configHeap.open_section(root, ACE_TEXT("Script"), 0, scriptSection) == -1)
+	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT ("GameOption::loadOptions Can't open Script section\n")));
+		return false;
+	}
+
+	ACE_TString scriptDir;
+	if (m_configHeap.get_string_value( scriptSection, ACE_TEXT("Dir"), scriptDir) == -1 )
+	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT ("GameOption::loadOptions Dir does not exist\n")));
+		return false;
+	}
+	m_scriptDir = scriptDir.c_str();
+
+	ACE_TString initTestFile;
+	if (m_configHeap.get_string_value( scriptSection, ACE_TEXT("TestFile"), initTestFile) == -1 )
+	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT ("GameOption::loadOptions TestFile does not exist\n")));
+		return false;
+	}
+	m_testScriptFile = initTestFile.c_str();
+
 	return true;
 }
 

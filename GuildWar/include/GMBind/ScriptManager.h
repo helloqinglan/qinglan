@@ -26,8 +26,11 @@ protected:
 	~ScriptManager();
 
 private:
+	bool runTestScript();
+
+private:
 	gmMachine* m_scriptMachine;
 };
 
 typedef ACE_Singleton<ScriptManager, ACE_Recursive_Thread_Mutex> ScriptManagerSingleton;
-#define SCRIPTMANAGER ScriptManagerSingleton::instance()
+#define SCRIPT_MANAGER ScriptManagerSingleton::instance()

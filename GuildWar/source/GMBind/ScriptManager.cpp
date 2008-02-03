@@ -7,6 +7,8 @@
 
 #include "GuildWarPch.h"
 #include "GMBind/ScriptManager.h"
+#include "GMBind/gmCall.h"
+#include "Util/GameOption.h"
 
 #include "GMBind/gmMathLib.h"
 #include "GMBind/gmStringLib.h"
@@ -53,14 +55,8 @@ bool ScriptManager::initialize()
 	// GuildWar附加库
 	gmBindPacketLib(m_scriptMachine);
 
-	// 测试一段script的执行
-	if (!executeString("a = WorldPacket(10);print(a.getOpcode());"))
+	if (!runTestScript())
 		return false;
-
-	// 测试string的长度问题
-	WorldPacket pkt(10, 100);
-	pkt << "hello";
-	int xxx = (int)pkt.length();
 
 	ACE_DEBUG ((GAME_DEBUG ACE_TEXT("ScriptManager::Initialize 脚本管理器初始化成功.\n")));
 	return true;
@@ -82,6 +78,41 @@ bool ScriptManager::executeString(const std::string& script)
 
 		return false;
 	}
+
+	return true;
+}
+
+bool ScriptManager::runTestScript()
+{
+	const std::string& fileName = GAME_OPTION->getTestScriptFile();
+	ifstream testStream(fileName.c_str());
+	if (!testStream)
+	{
+		ACE_ERROR ((GAME_ERROR ACE_TEXT("ScriptManager::runTestScript 测试脚本打开失败, 文件名:  %s.\n"),
+			fileName.c_str()));
+		return false;
+	}
+
+	std::string fileStr;
+	while (testStream.good())
+	{
+		std::string lineStr;
+		std::getline(testStream, lineStr);
+		fileStr += lineStr;
+	}
+
+	if (!executeString(fileStr.c_str()))
+		return false;
+
+	// 测试string参数传递的问题
+	WorldPacket pkt(10, 100);
+	pkt << "看到这段表示脚本注册成功";
+
+	gmCall call;
+	call.BeginGlobalFunction(m_scriptMachine, "initTestFunction");
+	gmUserObject* obj = createGMWorldPacket(m_scriptMachine, pkt);
+	call.AddParamUser(obj);
+	call.End();
 
 	return true;
 }

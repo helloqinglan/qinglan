@@ -26,10 +26,10 @@ int ACE_TMAIN(int, ACE_TCHAR *[])
 	if (!LOG_MANAGER->redirectToFile(GAME_OPTION->getLogFile().c_str()))
 		return -1;
 
-	if (!DATABASE->initialize(GAME_OPTION->getDatabase().c_str()))
+	if (!SCRIPT_MANAGER->initialize())
 		return -1;
 
-	if (!SCRIPTMANAGER->initialize())
+	if (!DATABASE->initialize(GAME_OPTION->getDatabase().c_str()))
 		return -1;
 
 	// 开启登录服务线程
