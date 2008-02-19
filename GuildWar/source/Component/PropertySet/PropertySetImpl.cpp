@@ -66,6 +66,29 @@ void PropertySetImpl::setFloatValue(u_short index, float value)
 		m_floatValues[index] = value;
 }
 
+void PropertySetImpl::setFlag(u_short index, u_int flag)
+{
+	u_int oldVal = m_uintValues[index];
+	u_int newVal = oldVal | flag;
+
+	if (oldVal != newVal)
+		m_uintValues[index] = newVal;
+}
+
+void PropertySetImpl::removeFlag(u_short index, u_int flag)
+{
+	u_int oldVal = m_uintValues[index];
+	u_int newVal = oldVal & ~flag;
+
+	if (oldVal != newVal)
+		m_uintValues[index] = newVal;
+}
+
+bool PropertySetImpl::hasFlag(u_short index, u_int flag)
+{
+	return ((m_uintValues[index] & flag) != 0);
+}
+
 std::string PropertySetImpl::getPropertyString() const
 {
 	std::ostringstream ss;

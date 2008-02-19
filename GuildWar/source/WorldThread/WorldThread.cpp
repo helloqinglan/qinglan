@@ -55,6 +55,10 @@ int WorldThread::svc()
 			// 有连接建立, 登录服务将不再接受新的登录请求
 			m_hasConnection = true;
 
+			int nodelay = 1;
+			if (peer.set_option(ACE_IPPROTO_TCP, TCP_NODELAY, &nodelay, sizeof(nodelay)) == -1)
+				ACE_ERROR ((GAME_ERROR ACE_TEXT("WorldThread::svc 为socket设置nodelay失败.\n")));
+
 			WorldSocket clientService(&peer);
 			clientService.transition(new SessionState(&clientService));
 

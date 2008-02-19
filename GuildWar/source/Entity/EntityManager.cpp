@@ -88,6 +88,16 @@ Entity* EntityManager::createEntity(WorldPacket& packet)
 	propSet->setUintValue(UNIT_FIELD_BYTES_2, (0x28 << 8));		// players - 0x2800, 0x2801, units - 0x1001
 	propSet->setUintValue(UNIT_FIELD_FLAGS, UNIT_FLAG_UNKNOWN1);
 	propSet->setFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
+	propSet->setFloatValue(OBJECT_FIELD_SCALE_X, 1.0f);
+
+	// 5项基本属性
+	for (int i = 0; i < MAX_STATS; ++i)
+		propSet->setUintValue(UNIT_FIELD_STAT0 + i, 1);
+
+	// ***TODO*** 生命值, 查表或配置
+	propSet->setUintValue(UNIT_FIELD_BASE_HEALTH, 100);
+	propSet->setUintValue(UNIT_FIELD_BASE_MANA, 0);
+	propSet->setUintValue(UNIT_FIELD_MAXHEALTH, 100);
 
 	u_char skin,face,hairStyle,hairColor,facialHair,outfitId;
 	packet >> skin >> face;

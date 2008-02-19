@@ -44,6 +44,18 @@ public:
 	virtual void setFloatValue(u_short index, float value) = 0;
 
 
+	// 属性位操作
+	virtual void setFlag(u_short index, u_int flag) = 0;
+
+	virtual void removeFlag(u_short index, u_int flag) = 0;
+
+	virtual void toggleFlag(u_short index, u_int flag) = 0;
+
+	virtual bool hasFlag(u_short index, u_int flag) = 0;
+
+	virtual void applyModFlag(u_short index, u_int flag, bool apply) = 0;
+
+
 	// 获取用于存库的属性集数据
 	virtual std::string getPropertyString() const = 0;
 

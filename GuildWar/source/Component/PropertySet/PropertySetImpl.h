@@ -42,6 +42,30 @@ public:
 	void setFloatValue(u_short index, float value);
 
 
+	// 属性位操作
+	void setFlag(u_short index, u_int flag);
+
+	void removeFlag(u_short index, u_int flag);
+
+	void toggleFlag(u_short index, u_int flag)
+	{
+		if (hasFlag(index, flag))
+			removeFlag(index, flag);
+		else
+			setFlag(index, flag);
+	}
+
+	bool hasFlag(u_short index, u_int flag);
+
+	void applyModFlag(u_short index, u_int flag, bool apply)
+	{
+		if (apply)
+			setFlag(index, flag);
+		else
+			removeFlag(index, flag);
+	}
+
+
 	// 获取用于存库的属性集数据
 	std::string getPropertyString() const;
 

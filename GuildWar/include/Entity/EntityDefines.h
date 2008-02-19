@@ -23,8 +23,8 @@ enum HighGuid
 
 
 // *-----------------------------------------------------------------
-// 玩家的装备槽位定义
 
+// 玩家的装备槽位定义
 enum EquipmentSlots
 {
     EQUIPMENT_SLOT_START		= 0,
@@ -52,6 +52,19 @@ enum EquipmentSlots
     EQUIPMENT_SLOT_END			= 19
 };
 
+
+// *-----------------------------------------------------------------
+
+// Unit的Stat类型定义 (5项基本属性)
+enum UnitStats
+{
+	STAT_STRENGTH,
+	STAT_AGILITY,
+	STAT_STAMINA,
+	STAT_INTELLECT,
+	STAT_SPIRIT,
+};
+#define MAX_STATS 5
 
 // UNIT_FIELD_FLAGS中设置的掩码
 enum UnitFlags
