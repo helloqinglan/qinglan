@@ -39,10 +39,13 @@
 #define SMSG_CHAR_ENUM					59		// 角色列表
 #define SMSG_CHAR_DELETE				60		// 删除角色
 #define	SMSG_LOGIN_SETTIMESPEED			66		// 服务器时间
+#define SMSG_FRIEND_LIST				103		// 好友列表
 #define SMSG_TUTORIAL_FLAGS				253		// 教程列表
 #define SMSG_INITIALIZE_FACTIONS		290		// 阵营信息
+#define SMSG_SET_PROFICIENCY			295		// ***TODO***
 #define SMSG_ACTION_BUTTONS				297		// 快捷栏列表
 #define SMSG_INITIAL_SPELLS				298		// 技能列表
+#define SMSG_UPDATE_AURA_DURATION		311		// ***TODO***
 #define SMSG_BINDPOINTUPDATE			341		// 旅馆位置更新
 #define SMSG_QUERY_TIME_RESPONSE		463		// ***TODO***
 #define SMSG_ACCOUNT_DATA_MD5			521		// 帐号MD5
@@ -205,6 +208,86 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 		return false;
 	}
 
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_UPDATE_AURA_DURATION, 5);
+		pkt << (u_char)0;
+		pkt << (u_int)-1;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)2;
+		pkt << (u_int)1;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)2;
+		pkt << (u_int)17;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)2;
+		pkt << (u_int)145;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)2;
+		pkt << (u_int)16529;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)4;
+		pkt << (u_int)8;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)4;
+		pkt << (u_int)12;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)4;
+		pkt << (u_int)14;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)4;
+		pkt << (u_int)78;
+		sendData(pkt);
+	}
+
+	// ***TODO***
+	{
+		WorldPacket pkt(SMSG_SET_PROFICIENCY, 8);
+		pkt << (u_int)4;
+		pkt << (u_int)79;
+		sendData(pkt);
+	}
+
 	// 发送副本难度数据
 	{
 		WorldPacket pkt(SMSG_SET_DUNGEON_DIFFICULTY, 12);
@@ -233,14 +316,20 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 		sendData(pkt);
 	}
 
-	// ***TODO*** 好友列表
+	// 好友列表
+	{
+		WorldPacket pkt(SMSG_FRIEND_LIST, 1);
+		pkt << (u_char)0;
+		sendData(pkt);
+	}
+
 	// ***TODO*** 屏蔽列表
 
 	// 发送语音系统状态设置数据
 	{
 		WorldPacket pkt(SMSG_VOICE_SYSTEM_STATUS, 2);
 		pkt << (u_char)2;
-		pkt << (u_char)0;		// 1为启用客户端聊天界面
+		pkt << (u_char)0;		// 1为启用客户端语言聊天设置界面
 		sendData(pkt);
 	}
 
@@ -326,7 +415,7 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 	{
 		u_short numOfFields = 10;
 
-		WorldPacket pkt(SMSG_INIT_WORLD_STATES, 14);
+		WorldPacket pkt(SMSG_INIT_WORLD_STATES, 14 + numOfFields * 8);
 		pkt << unitInterf->map();
 		pkt << unitInterf->zone();
 		pkt << unitInterf->area();
@@ -360,15 +449,11 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 		sendData(pkt);
 	}
 
-	return true;
-
 	// ***TODO*** SMSG_TRIGGER_CINEMATIC 触发动画, 用脚本看看都有哪些动画
 
 	// 发送属性改变数据到客户端
 	// ***TODO*** 这段代码不应该放在这里
 	{
-		UpdateData data;
-
 		u_char updateType = UpdateData::UPDATETYPE_CREATE_OBJECT2;
 		u_char flags = UpdateData::UPDATEFLAG_HIGHGUID | UpdateData::UPDATEFLAG_LIVING | 
 			UpdateData::UPDATEFLAG_HASPOSITION | UpdateData::UPDATEFLAG_SELF;
@@ -376,11 +461,11 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 
 		ByteBuffer buf(500);
 		buf << updateType;
-		buf << 0xFF << guid;
+		buf << (u_char)0xFF << guid;
 		buf << (u_char)4;			// ***TODO*** OBJECT_TYPEID, 玩家为4, 要在entity中提供查询接口
 
 		buf << flags;
-		buf << (u_int)0;			// 移动掩码
+		buf << flags2;				// 移动掩码
 		buf << (u_char)0;
 		buf << (u_int)GetTickCount();
 
@@ -416,6 +501,7 @@ bool CharacterState::playerLogin(WorldPacket& packet)
 		for (u_short i = 0; i < propSet->valueCount(); ++i)
 			buf << propSet->getUintValue(i);
 
+		UpdateData data;
 		data.addUpdateBlock(buf);
 
 		WorldPacket pkt;

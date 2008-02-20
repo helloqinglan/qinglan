@@ -103,10 +103,6 @@ bool DataIOImpl::load(u_int id)
 	propSet->setUint64Value(UNIT_FIELD_SUMMONEDBY, 0);
 	propSet->setUint64Value(UNIT_FIELD_CREATEDBY, 0);
 
-	// ***TODO*** 角色最高等级, 可配置
-	propSet->setUintValue(PLAYER_FIELD_MAX_LEVEL, 70);
-	propSet->setUintValue(PLAYER_NEXT_LEVEL_XP, 100);
-
 	return true;
 }
 

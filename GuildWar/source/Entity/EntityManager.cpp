@@ -58,7 +58,7 @@ Entity* EntityManager::createEntity(WorldPacket& packet)
 	propSet->initialize(PLAYER_END);
 	propSet->setUintValue(OBJECT_FIELD_GUID, m_hiCharGuid++);
 	propSet->setUintValue(OBJECT_FIELD_GUID + 1, HIGHGUID_PLAYER);
-	propSet->setUintValue(OBJECT_FIELD_TYPE, Entity::Type_Player);
+	propSet->setUintValue(OBJECT_FIELD_TYPE, Entity::Type_Object | Entity::Type_Unit | Entity::Type_Player);
 
 	packet >> entity->m_entityName;
 
@@ -80,6 +80,8 @@ Entity* EntityManager::createEntity(WorldPacket& packet)
 	propSet->setUintValue(UNIT_FIELD_DISPLAYID, 49);
 	propSet->setUintValue(UNIT_FIELD_NATIVEDISPLAYID, 49);
 
+	propSet->setUintValue(UNIT_FIELD_FACTIONTEMPLATE, 1);
+
 	// ***TODO*** 需要查表
 	u_char powerType = 1;
 	u_int unitfield = 0x00110000;
@@ -91,13 +93,22 @@ Entity* EntityManager::createEntity(WorldPacket& packet)
 	propSet->setFloatValue(OBJECT_FIELD_SCALE_X, 1.0f);
 
 	// 5项基本属性
-	for (int i = 0; i < MAX_STATS; ++i)
-		propSet->setUintValue(UNIT_FIELD_STAT0 + i, 1);
+	for (int i = STAT_STRENGTH; i < STATS_MAX; ++i)
+	{
+		propSet->setUintValue(UNIT_FIELD_STAT0 + i, 20);
+		propSet->setFloatValue(UNIT_FIELD_POSSTAT0 + i, 0.0f);
+		propSet->setFloatValue(UNIT_FIELD_NEGSTAT0 + i, 0.0f);
+	}
 
 	// ***TODO*** 生命值, 查表或配置
 	propSet->setUintValue(UNIT_FIELD_BASE_HEALTH, 100);
 	propSet->setUintValue(UNIT_FIELD_BASE_MANA, 0);
 	propSet->setUintValue(UNIT_FIELD_MAXHEALTH, 100);
+	propSet->setUintValue(UNIT_FIELD_MAXPOWER1, 0);
+	propSet->setUintValue(UNIT_FIELD_MAXPOWER2, 1000);
+	propSet->setUintValue(UNIT_FIELD_MAXPOWER3, 0);
+	propSet->setUintValue(UNIT_FIELD_MAXPOWER4, 100);
+	propSet->setUintValue(UNIT_FIELD_MAXPOWER5, 0);
 
 	u_char skin,face,hairStyle,hairColor,facialHair,outfitId;
 	packet >> skin >> face;
@@ -110,6 +121,24 @@ Entity* EntityManager::createEntity(WorldPacket& packet)
 
 	// ***TODO*** 新建的角色都为1级, 改为可配置的
 	propSet->setUintValue(UNIT_FIELD_LEVEL, 1);
+	propSet->setUintValue(PLAYER_FIELD_MAX_LEVEL, 70);
+	propSet->setUintValue(PLAYER_NEXT_LEVEL_XP, 100);
+
+	propSet->setUintValue(UNIT_FIELD_RESISTANCES, 40);
+
+	propSet->setUintValue(PLAYER_FIELD_MOD_HEALING_DONE_POS, 0);
+	for (int i = 0; i < 7; ++i)
+	{
+		propSet->setUintValue(PLAYER_FIELD_MOD_DAMAGE_DONE_NEG + i, 0);
+		propSet->setUintValue(PLAYER_FIELD_MOD_DAMAGE_DONE_POS + i, 0);
+		propSet->setFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + i, 1.0f);
+	}
+
+	propSet->setFloatValue(UNIT_FIELD_BASEATTACKTIME, 2000.0f);
+	propSet->setFloatValue(UNIT_FIELD_OFFHANDATTACKTIME, 2000.0f);
+	propSet->setFloatValue(UNIT_FIELD_RANGEDATTACKTIME, 2000.0f);
+
+	propSet->setUintValue(PLAYER_CHARACTER_POINTS2, 2);
 
 	return entity;
 }

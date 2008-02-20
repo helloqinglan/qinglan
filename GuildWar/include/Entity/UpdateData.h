@@ -48,6 +48,9 @@ public:
 	IDList const& getIDList() const { return m_guidList; }
 
 private:
+	void compress(void* dst, u_int* dstSize, void* src, u_int srcSize);
+
+private:
 	u_int m_blockCount;
 
 	IDList m_guidList;

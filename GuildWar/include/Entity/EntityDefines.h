@@ -63,11 +63,29 @@ enum UnitStats
 	STAT_STAMINA,
 	STAT_INTELLECT,
 	STAT_SPIRIT,
+
+	STATS_MAX,
 };
-#define MAX_STATS 5
 
 // UNIT_FIELD_FLAGS中设置的掩码
 enum UnitFlags
 {
 	UNIT_FLAG_UNKNOWN1	= 0x00000008,
+};
+
+
+// *-----------------------------------------------------------------
+
+// 法术类型定义
+enum SpellSchools
+{
+	SPELL_SCHOOL_NORMAL,
+	SPELL_SCHOOL_HOLY,
+	SPELL_SCHOOL_FIRE,
+	SPELL_SCHOOL_NATURE,
+	SPELL_SCHOOL_FROST,
+	SPELL_SCHOOL_SHADOW,
+	SPELL_SCHOOL_ARCANE,
+
+	MAX_SPELL_SCHOOL,
 };

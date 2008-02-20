@@ -17,6 +17,7 @@ public:
 	{
 		Type_Unkown = 0,		// 未初始化
 		Type_Object	= 1,		// ***TODO*** 对象基类, 游戏中有这种类型的对象吗?
+		Type_Unit = 8,
 		Type_Player = 16,		// 玩家
 	};
 
