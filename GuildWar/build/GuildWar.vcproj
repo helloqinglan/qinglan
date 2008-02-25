@@ -296,7 +296,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\include\GMBind\gmByteBufferLib.h"
+					>
+				</File>
+				<File
 					RelativePath="..\include\GMBind\gmCall.h"
+					>
+				</File>
+				<File
+					RelativePath="..\include\GMBind\gmEventsLib.h"
 					>
 				</File>
 				<File
@@ -676,7 +684,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\source\GMBind\gmByteBufferLib.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\source\GMBind\gmCall.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\source\GMBind\gmEventsLib.cpp"
 					>
 				</File>
 				<File

@@ -262,7 +262,7 @@ public:
 	const u_char* contents() const { return &m_dataStorage[0]; }
 
 	// 返回数据总长度, 包括已读取的数据
-	inline size_t size() const { return m_dataStorage.size(); }
+	inline size_t size() const { return /*m_dataStorage.size()*/m_writePos; }
 
 	// 返回还未读取的数据长度
 	inline size_t length() const { return m_writePos - m_readPos; }
@@ -298,6 +298,7 @@ public:
 
 		if (m_dataStorage.size() < m_writePos + cnt)
 			m_dataStorage.resize(m_writePos + cnt);
+
 		memcpy(&m_dataStorage[m_writePos], src, cnt);
 		m_writePos += cnt;
 	}

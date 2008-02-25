@@ -9,6 +9,13 @@
 /** TODO List **/
 /* 发现以'//'打头的单行注释会有问题, 必须使用老C语言注释的方式 */
 
+global testeventcb = function(b)
+{
+	print(b.getInt());
+	print(b.getFloat());
+	print(b.getString());
+};
+bindEventCallback(1, "testeventcb");
 
 global initTestFunction = function(v)
 {

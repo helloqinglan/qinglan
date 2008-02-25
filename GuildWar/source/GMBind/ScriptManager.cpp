@@ -18,9 +18,12 @@
 #include "gm/gmDebug.h"
 
 #include "GMBind/gmPacketLib.h"
+#include "GMBind/gmByteBufferLib.h"
+#include "GMBind/gmEventsLib.h"
 
 // test
 #include "WorldThread/WorldPacket.h"
+#include "Util/EventServer.h"
 
 ScriptManager::ScriptManager()
 : m_scriptMachine(0)
@@ -54,6 +57,8 @@ bool ScriptManager::initialize()
 
 	// GuildWar附加库
 	gmBindPacketLib(m_scriptMachine);
+	gmBindByteBufferLib(m_scriptMachine);
+	gmBindEventsLib(m_scriptMachine);
 
 	if (!runTestScript())
 		return false;
@@ -103,7 +108,7 @@ bool ScriptManager::runTestScript()
 
 	if (!executeString(fileStr.c_str()))
 		return false;
-
+/*
 	// 测试string参数传递的问题
 	WorldPacket pkt(10, 100);
 	pkt << "看到这段表示脚本注册成功";
@@ -113,6 +118,13 @@ bool ScriptManager::runTestScript()
 	gmUserObject* obj = createGMWorldPacket(m_scriptMachine, pkt);
 	call.AddParamUser(obj);
 	call.End();
+*/
+	// 测试event
+	ByteBuffer arg;
+	arg << (int)1;
+	arg << (float)102.35f;
+	arg << "hello world";
+	S_EventServer->emit(1, arg);
 
 	return true;
 }

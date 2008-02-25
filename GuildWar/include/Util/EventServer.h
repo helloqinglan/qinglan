@@ -48,6 +48,12 @@ public:
 
 		DelegateList& delegateLi = *(itr->second);
 		MyDelegate delgate(pthis, function_to_bind);
+
+		// 避免重复注册
+		DelegateList::iterator func_itr = std::find(delegateLi.begin(), delegateLi.end(), delgate);
+		if (func_itr != delegateLi.end())
+			return;
+
 		delegateLi.push_back(delgate);
 	}
 
@@ -59,19 +65,14 @@ public:
 		if (itr == m_delegateMap.end())
 			return;
 
+		DelegateList& delegateLi = *(itr->second);
 		MyDelegate delgate(pthis, function_to_bind);
 
-		DelegateList& delegateLi = *(itr->second);
-		DelegateList::iterator func_itr;
-		for (func_itr = delegateLi.begin(); func_itr != delegateLi.end(); ++func_itr)
-		{
-			if (*func_itr == delgate)
-			{
-				delegateLi.erase(func_itr);
-				break;
-			}
-		}
+		DelegateList::iterator func_itr = std::find(delegateLi.begin(), delegateLi.end(), delgate);
+		if (func_itr != delegateLi.end())
+			delegateLi.erase(func_itr);
 
+		// 该事件已没有回调, 则删除该队列
 		if (!delegateLi.size())
 			m_delegateMap.erase(itr);
 	}
@@ -89,6 +90,12 @@ public:
 
 		DelegateList& delegateLi = *(itr->second);
 		MyDelegate delgate(function_to_bind);
+
+		// 避免重复注册
+		DelegateList::iterator func_itr = std::find(delegateLi.begin(), delegateLi.end(), delgate);
+		if (func_itr != delegateLi.end())
+			return;
+
 		delegateLi.push_back(delgate);
 	}
 
@@ -99,19 +106,14 @@ public:
 		if (itr == m_delegateMap.end())
 			return;
 
+		DelegateList& delegateLi = *(itr->second);
 		MyDelegate delgate(function_to_bind);
 
-		DelegateList& delegateLi = *(itr->second);
-		DelegateList::iterator func_itr;
-		for (func_itr = delegateLi.begin(); func_itr != delegateLi.end(); ++func_itr)
-		{
-			if (*func_itr == delgate)
-			{
-				delegateLi.erase(func_itr);
-				break;
-			}
-		}
+		DelegateList::iterator func_itr = std::find(delegateLi.begin(), delegateLi.end(), delgate);
+		if (func_itr != delegateLi.end())
+			delegateLi.erase(func_itr);
 
+		// 该事件已没有回调, 则删除该队列
 		if (!delegateLi.size())
 			m_delegateMap.erase(itr);
 	}
