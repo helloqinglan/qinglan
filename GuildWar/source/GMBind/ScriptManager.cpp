@@ -118,13 +118,28 @@ bool ScriptManager::runTestScript()
 	gmUserObject* obj = createGMWorldPacket(m_scriptMachine, pkt);
 	call.AddParamUser(obj);
 	call.End();
-*/
+
 	// ≤‚ ‘event
 	ByteBuffer arg;
 	arg << (int)1;
 	arg << (float)102.35f;
 	arg << "hello world";
 	S_EventServer->emit(1, arg);
+*/
+	// ≤‚ ‘UserObjectµƒGCŒ Ã‚
+	gmCall testGC;
+	testGC.BeginGlobalFunction(m_scriptMachine, "testGC");
+	ByteBuffer buf;
+	buf << "testGC......";
+	gmUserObject* obj = createGMByteBuffer(m_scriptMachine, buf);
+	testGC.AddParamUser(obj);
+	testGC.End();
+
+	m_scriptMachine->CollectGarbage(true);
+
+	gmCall testGC2;
+	testGC2.BeginGlobalFunction(m_scriptMachine, "testGC2");
+	testGC2.End();
 
 	return true;
 }

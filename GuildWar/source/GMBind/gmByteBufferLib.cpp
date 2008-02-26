@@ -142,16 +142,10 @@ public:
 
 	// *-------------------------------------------------------------
 	// gmMachine GC 所需要的方法
-#if GM_USE_INCGC
 	static void GM_CDECL GCDestruct(gmMachine* a_machine, gmUserObject* a_object)
-#else
-	static void GM_CDECL Collect(gmMachine * a_machine, gmUserObject * a_object, gmuint32 a_mark)
-#endif
 	{
 		GM_ASSERT(a_object->m_userType == GM_BYTEBUFFER);
 		gmByteBuffer* object = (gmByteBuffer*)a_object->m_user;
-
-		// ***TODO*** GC是怎么处理的? 需不需要显示的删除?
 		delete object;
 	}
 
@@ -181,18 +175,6 @@ gmUserObject* createGMByteBuffer(gmMachine* a_machine, const ByteBuffer& buf)
 	return a_machine->AllocUserObject(gmbuf, GM_BYTEBUFFER);
 }
 
-// test
-static int GM_CDECL testBBFun(gmThread* a_thread)
-{
-	GM_CHECK_NUM_PARAMS(1);
-	GM_CHECK_USER_PARAM(gmByteBuffer*, GM_BYTEBUFFER, buf, 0);
-
-	ByteBuffer* data = buf->getBufferData();
-	u_int v = data->read<u_int>();
-
-	return GM_OK;
-}
-
 
 // *-----------------------------------------------------------------
 // Libs
@@ -200,9 +182,6 @@ static int GM_CDECL testBBFun(gmThread* a_thread)
 static gmFunctionEntry s_byteBufferLib[] =
 {
 	{"ByteBuffer", gmByteBuffer::Buffer},
-
-	// test
-	{"testBBFun", testBBFun},
 };
 
 static gmFunctionEntry s_packetTypeLib[] =
@@ -238,9 +217,5 @@ void gmBindByteBufferLib(gmMachine * a_machine)
 	a_machine->RegisterTypeLibrary(GM_BYTEBUFFER, s_packetTypeLib, sizeof(s_packetTypeLib) / sizeof(s_packetTypeLib[0]));
 
 	// Register garbage collection for type
-#if GM_USE_INCGC
-	a_machine->RegisterUserCallbacks(GM_BYTEBUFFER, NULL, gmByteBuffer::GCDestruct, gmByteBuffer::AsString); 
-#else
-	a_machine->RegisterUserCallbacks(GM_BYTEBUFFER, NULL, gmByteBuffer::Collect, gmByteBuffer::AsString);
-#endif
+	a_machine->RegisterUserCallbacks(GM_BYTEBUFFER, NULL, gmByteBuffer::GCDestruct, gmByteBuffer::AsString);
 }

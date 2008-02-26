@@ -15,9 +15,22 @@ global testeventcb = function(b)
 	print(b.getFloat());
 	print(b.getString());
 };
-bindEventCallback(1, "testeventcb");
+Events.bindEventCallback(1, testeventcb);
 
 global initTestFunction = function(v)
 {
 	print(v.getString());
+};
+
+global test_b;
+global testGC = function(b)
+{
+	global test_b = b;
+	print(b.getString());
+	test_b.putString("world...");
+};
+
+global testGC2 = function()
+{
+	print(test_b.getString());
 };

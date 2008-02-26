@@ -146,16 +146,6 @@ public:
 		return GM_OK;
 	}
 
-	// ***TODO*** test
-	static int GM_CDECL sendData(gmThread* a_thread)
-	{
-		gmWorldPacket* pkt = (gmWorldPacket*)a_thread->ThisUser_NoChecks();
-		std::string data;
-		*(pkt->m_packet) >> data;
-		ACE_DEBUG ((GAME_DEBUG ACE_TEXT("gmWorldPacket::sendData 测试数据: %s.\n"), 
-			data.c_str()));
-		return GM_OK;
-	}
 
 	// *-------------------------------------------------------------
 	// 脚本中WorldPacket类型的构造函数
@@ -175,19 +165,10 @@ public:
 
 	// *-------------------------------------------------------------
 	// gmMachine GC 所需要的方法
-#if GM_USE_INCGC
 	static void GM_CDECL GCDestruct(gmMachine* a_machine, gmUserObject* a_object)
-#else
-	static void GM_CDECL Collect(gmMachine * a_machine, gmUserObject * a_object, gmuint32 a_mark)
-#endif
 	{
 		GM_ASSERT(a_object->m_userType == GM_PACKET);
 		gmWorldPacket* object = (gmWorldPacket*)a_object->m_user;
-
-		ACE_DEBUG ((GAME_DEBUG ACE_TEXT("gmWorldPacket::GCDestruct gmWorldPacket对象(%d)被GC回收.\n"), 
-			object->m_packet->getOpcode()));
-
-		// ***TODO*** GC是怎么处理的? 需不需要显示的删除?
 		delete object;
 	}
 
@@ -238,9 +219,6 @@ static gmFunctionEntry s_packetTypeLib[] =
 	{"putFloat", gmWorldPacket::putFloat},
 	{"putChar", gmWorldPacket::putChar},
 	{"putString", gmWorldPacket::putString},
-
-	// ***TODO*** test
-	{"sendData", gmWorldPacket::sendData},
 };
 
 
@@ -259,9 +237,5 @@ void gmBindPacketLib(gmMachine * a_machine)
 	a_machine->RegisterTypeLibrary(GM_PACKET, s_packetTypeLib, sizeof(s_packetTypeLib) / sizeof(s_packetTypeLib[0]));
 
 	// Register garbage collection for type
-#if GM_USE_INCGC
-	a_machine->RegisterUserCallbacks(GM_PACKET, NULL, gmWorldPacket::GCDestruct, gmWorldPacket::AsString); 
-#else
-	a_machine->RegisterUserCallbacks(GM_PACKET, NULL, gmWorldPacket::Collect, gmWorldPacket::AsString);
-#endif
+	a_machine->RegisterUserCallbacks(GM_PACKET, NULL, gmWorldPacket::GCDestruct, gmWorldPacket::AsString);
 }
